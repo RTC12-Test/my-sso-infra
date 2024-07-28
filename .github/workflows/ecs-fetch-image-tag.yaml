@@ -1,0 +1,70 @@
+name: Docker Image Tag
+
+on:
+  workflow_call:
+    inputs:
+      cluster-name:
+        description: "AWS cluster name"
+        type: string
+        required: true
+      service-name:
+        description: "AWS service name"
+        type: string
+        required: true
+      role-to-assume:
+        description: "AWS Role arn"
+        type: string
+        required: true
+      role-session-name:
+        description: "AWS Role session name"
+        type: string
+        required: true
+      task-name:
+        description: "ECS task name"
+        type: string
+        required: true
+      aws-region-name:
+        description: "AWS region name"
+        type: string
+        required: true
+      ecr-repo-name:
+        description: "ECR repo name"
+        type: string
+        required: true
+    outputs:
+      docker-image-tag:
+        value: ${{ jobs.docker-image-tag.outputs.docker-image-tag }}
+
+jobs:
+  docker-image-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      docker-image-tag: ${{ steps.docker-image-tag.outputs.docker_image_tag}}
+    steps:
+      # Logging to aws
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          role-to-assume: ${{ inputs.role-to-assume }}
+          role-session-name: ${{ inputs.role-session-name }}
+          aws-region: ${{ inputs.aws-region-name }}
+
+      # Install aws cli
+      - name: Install AWS cli
+        id: install-AWS-cli
+        uses: unfor19/install-aws-cli-action@v1
+        with:
+          version: 2
+          verbose: false
+          arch: amd64
+
+      # Getting docker image tag
+      - name: Getting the docker image tag
+        id: docker-image-tag
+        run: |
+          docker_image_tag=$(aws ecs describe-services --cluster ${{ inputs.cluster-name }} --services ${{ inputs.service-name }} --query "services[0].taskDefinition" --output text | xargs aws ecs describe-task-definition --task-definition | jq -r '.taskDefinition.containerDefinitions[0].image | split(":")[1]') && \
+          if [ -z "$docker_image_tag" ]; then \
+            echo "ECS service or task definition not found"; \
+            docker_image_tag=$(aws ecr describe-images --repository-name ${{ inputs.ecr-repo-name }} --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text); \
+            fi && \
+            echo "docker_image_tag=$docker_image_tag" >> $GITHUB_OUTPUT

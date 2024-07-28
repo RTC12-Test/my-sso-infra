@@ -1,0 +1,149 @@
+name: Maven Build
+
+on:
+  workflow_call:
+    inputs:
+      distribution:
+        description: "Distribution for downloading Java openjdk"
+        type: string
+        required: false
+        default: "temurin"
+      role-to-assume:
+        type: string
+        required: false
+        description: "AWS role arn"
+      role-session-name:
+        type: string
+        required: false
+        description: "AWS role session name"
+      aws-region-name:
+        type: string
+        required: false
+        description: "AWS region name"
+      task_name:
+        description: "ECS task name"
+        type: string
+        required: false
+      maven-version:
+        description: "Maven version"
+        type: string
+        required: false
+        default: 3.8.7
+      java-version:
+        description: "Java version"
+        type: string
+        required: false
+        default: "11"
+      maven-username:
+        description: "Github username to pass in settings.xml"
+        type: string
+        required: false
+        default: ""
+      maven-url:
+        description: "Github packages URL to be passed in settings.xml"
+        type: string
+        required: false
+        default: ""
+      maven-id:
+        description: "Repository ID to be passed in settings.xml"
+        type: string
+        required: false
+        default: ""
+      enable-settings:
+        description: "Flag to generate settings.xml"
+        type: boolean
+        required: false
+        default: false
+      maven-commands:
+        description: "Maven commands"
+        type: string
+        required: false
+        default: "mvn clean package"
+      runner:
+        description: "Runner image"
+        type: string
+        required: false
+        default: "ubuntu-latest"
+      upload-artifacts:
+        description: "Flag to generate settings xml"
+        type: boolean
+        default: true
+        required: false  
+    secrets:
+      ACS_PAT_READ_GITHUB_PACKAGES:
+        description: "GitHub token for settings.xml"
+        required: false
+
+jobs:
+  packaging-and-publishing:
+    runs-on: ${{ inputs.runner }}
+    name: Build and Publish maven package
+    steps:
+      # Checkout the project
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Set up Java for building Jar
+      - name: Set up JDK ${{ inputs.java-version }}
+        uses: actions/setup-java@v4.2.1
+        with:
+          distribution: ${{ inputs.distribution }}
+          java-version: ${{ inputs.java-version }}
+
+      # Set up Maven
+      - name: Set up Maven for version ${{ inputs.maven-version }}
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: ${{ inputs.maven-version }}
+
+      # Generating settings.xml
+      - name: Configuring settings.xml
+        uses: whelk-io/maven-settings-xml-action@v4
+        if: ${{ inputs.enable-settings == true }}
+        with:
+          repositories: '[{ "id": "${{ inputs.maven-id }}", "url": "${{ inputs.maven-url }}" }]'
+          servers: '[{ "id": "${{ inputs.maven-id }}", "username": "${{ inputs.maven-username }}", "password": "${{ secrets.ACS_PAT_READ_GITHUB_PACKAGES }}" }]'
+      
+      # Logging to aws
+      - name: Configure AWS credentials
+        if: ${{ inputs.runner != 'ubuntu-latest' }}
+        uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          role-to-assume:  ${{ inputs.role-to-assume }}
+          role-session-name: ${{ inputs.role-session-name }}
+          aws-region: ${{ inputs.aws-region-name }}
+
+      # Fetch ECS taskdefinition environment variables 
+      - name: Fetch ECS Task Definition Environment Variables
+        if: ${{ inputs.runner != 'ubuntu-latest' }}
+        id: env
+        run: |
+          envs=$(aws ecs describe-task-definition --task-definition ${{ inputs.task_name }} --query "taskDefinition.containerDefinitions[0].environment" --output text --no-paginate)
+          echo "#!/bin/bash" >> set_env.sh
+          while IFS= read -r line; do
+           key=$(echo "$line" | awk '{print $1}')
+           value=$(echo "$line" | awk '{$1=""; print}' | xargs)
+           echo "export $key=$value"  >> set_env.sh
+          done <<< "$envs"
+      
+      # Maven commands
+      - name: Maven commands
+        run:  | 
+         if [[ ${{ inputs.runner }} != "ubuntu-latest" ]]; then
+          chmod +x set_env.sh
+          source set_env.sh
+          ${{ inputs.maven-commands }} 
+         else
+          ${{ inputs.maven-commands }} 
+         fi 
+          
+      # Upload war to artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4.3.3
+        if: ${{ inputs.upload-artifacts == true }}
+        with:
+          name: ${{ github.event.repository.name }}
+          path: |
+            target/

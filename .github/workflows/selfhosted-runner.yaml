@@ -1,0 +1,68 @@
+name: Self Hosted Runner
+on:
+  workflow_call:
+    inputs:
+      role-to-assume:
+        description: "AWS Role arn"
+        type: string
+        required: true
+      role-session-name:
+        description: "AWS Role session name"
+        type: string
+        required: true
+      cluster-name:
+        description: "AWS cluster name"
+        type: string
+        required: true
+      task_name:
+        description: "AWS task name"
+        type: string
+        required: true
+      container-name:
+        description: "AWS container name"
+        type: string
+        required: true
+      aws-region-name:
+        description: "AWS region name"
+        type: string
+        required: true
+      subnet-ids :
+        description: "Subnet ID for self-hosted runner"
+        type: string 
+        required: true
+      security-group-ids:
+        description: "Security group ID for self-hosted runner"
+        type: string 
+        required: true
+    secrets:
+      ACS_PAT_SELF_HOSTED_RUNNER_REGISTRATION:
+        description: "token for self-hosted runner"
+        required: false
+
+  
+jobs:
+    Setup_Runner:
+     runs-on: ubuntu-latest
+     steps:      
+      # AWS Authentication
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          role-to-assume:  ${{ inputs.role-to-assume }}
+          role-session-name: ${{ inputs.role-session-name }}
+          aws-region: ${{ inputs.aws-region-name }}
+
+      # Launch Runner  
+      - name: Launch self-hosted runner
+        uses: geekcell/github-action-aws-ecs-run-task@v3.0.0
+        with:
+          cluster: ${{ inputs.cluster-name }}
+          task-definition: ${{ inputs.task_name }}
+          assign-public-ip: 'ENABLED'
+          override-container: ${{ inputs.container-name }}
+          subnet-ids: ${{ inputs.subnet-ids }}
+          override-container-environment: |
+               GITHUB_REPOSITORY_NAME=${{ github.event.repository.name }}    
+               GITHUB_ACCESS_TOKEN=${{ secrets.ACS_PAT_SELF_HOSTED_RUNNER_REGISTRATION }}
+               GITHUB_BUILD_NUMBER=${{ github.run_id }}
+          security-group-ids: ${{ inputs.security-group-ids }}
