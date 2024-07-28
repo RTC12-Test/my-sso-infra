@@ -21,7 +21,7 @@ on:
         type: string
         required: true 
     outputs:
-      docker-image-url:
+      id:
         value: ${{ jobs.security_group.outputs.id }}
 
 
