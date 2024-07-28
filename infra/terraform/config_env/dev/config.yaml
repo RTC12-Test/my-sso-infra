@@ -14,8 +14,8 @@ division: "st"
 department: "a86065"
 technicalContact: "SSO-SUPPORT@acs.org"
 map_migrated_tag: "mig42366"
-
-service_name: ""
+aws_vpc_endpoint_service_name: "com.amazonaws.us-east-1.elasticfilesystem"
+service_name: "global"
 
 # Security Group variables
 aws_sg_configuration:
@@ -41,3 +41,4 @@ aws_sg_configuration:
          aws_sg_enable_alb_cidr_ipv4: true
          aws_reference_sg: [""] 
          aws_reference_sg_id: [""]
+
