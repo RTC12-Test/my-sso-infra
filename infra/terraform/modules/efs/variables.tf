@@ -34,17 +34,6 @@ variable "efs_file_system_encrypted" {
   type        = bool
   default     = true
 }
-variable "output_path" {
-  description = "Output path of source code archive"
-  type        = string
-  default     = path.root
-}
-
-variable "source_dir" {
-  description = "Specifies attributes of a single source file to include into the archive. One and only one of source, source_content_filename (with source_content), source_file, or source_dir must be specified"
-  type        = string
-  default     = "${path.module}/python"
-}
 variable "aws_vpc_efs_subnets" {
   description = "The IDS of the subnet to add the mount target in"
   type        = list(string)
