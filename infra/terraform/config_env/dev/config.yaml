@@ -22,6 +22,12 @@ aws_sg_configuration:
      # ALB Security Group 
      # Naming format should be as follows "purpose" "alb-type" , according this example  purpose for "app" alb type is "internal" 
    - name: "sg-comman" 
+     aws_sg_ingress_rules:
+      -   aws_sg_ingress_cidr_ip4: [""]
+          aws_sg_inbound_port: []
+          aws_sg_enable_alb_cidr_ipv4: false
+          aws_reference_sg : ["sg-comman"]
+          aws_reference_sg_id: [""]
      aws_sg_egress_rules:
       -  aws_sg_ingress_cidr_ip4: ["0.0.0.0/0"]
          aws_sg_inbound_port: [-1]    
