@@ -58,7 +58,7 @@ variable "task_definition_variables" {
 variable "aws_taskdefinition_volume_name" {
   description = "Name of the volume. This name is referenced in the sourceVolume parameter of container definition in the mountPoints section."
   type        = string
-  default     = ""
+  default     = "mounting"
 }
 variable "aws_efs_id" {
   description = "ID of the EFS File System."
