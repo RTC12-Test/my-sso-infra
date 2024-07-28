@@ -64,4 +64,5 @@ module "vpc_endpoint" {
   aws_vpc_id                    = lookup(local.configs, "aws_vpc_id")
   default_tags                  = local.default_tags
   env                           = terraform.workspace
+  map_migrated_tag              = lookup(local.configs, "map_migrated_tag")
 }

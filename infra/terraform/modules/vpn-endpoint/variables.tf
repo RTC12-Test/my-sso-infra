@@ -43,3 +43,8 @@ variable "org_name" {
   type        = string
   default     = ""
 }
+variable "map_migrated_tag" {
+  description = "Workloads moving to AWS should have this tag"
+  type        = string
+  default     = ""
+}

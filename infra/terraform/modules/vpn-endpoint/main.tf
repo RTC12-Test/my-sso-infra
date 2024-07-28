@@ -5,8 +5,9 @@ resource "aws_vpc_endpoint" "efs_vpc_endpoint" {
   subnet_ids         = var.aws_vpc_endpoint_subnet
   security_group_ids = var.aws_vpc_endpoint_sg_ids
   tags = merge(var.default_tags, {
-    Name         = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-sg"
-    Used_by      = var.service_name
-    map-migrated = var.map_migrated_tag
+    tags = merge(var.default_tags, {
+      Name         = "${var.org_name}-${var.app_name}-${var.env}-vpc-endpoint"
+      map-migrated = var.map_migrated_tag
+    })
   })
 }
