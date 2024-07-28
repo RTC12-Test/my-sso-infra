@@ -57,7 +57,7 @@ module "efs" {
 module "vpc_endpoint" {
   source                        = "./modules/vpn-endpoint"
   aws_vpc_endpoint_sg_ids       = []
-  aws_vpc_endpoint_subnet       = lookup(local.configs, "aws_subnets")
+  aws_vpc_endpoint_subnet       = lookup(local.configs, "aws_subnet")
   aws_vpc_endpoint_service_name = lookup(local.configs, "aws_vpc_endpoint_service_name")
   aws_vpc_id                    = lookup(local.configs, "aws_vpc_id")
   default_tags                  = local.default_tags

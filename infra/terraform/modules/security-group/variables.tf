@@ -36,7 +36,7 @@ variable "aws_sg_ingress_protocal" {
 variable "aws_sg_egress_protocal" {
   description = "Protocol. If you select a protocol of -1 (semantically equivalent to all, which is not a valid value here), you must specify a from_port and to_port equal to 0"
   type        = string
-  default     = "tcp"
+  default     = "-1"
 }
 variable "map_migrated_tag" {
   description = "Workloads moving to AWS should have this tag"
