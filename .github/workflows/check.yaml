@@ -1,0 +1,46 @@
+name: Check
+# Runs the workflow on the below events:
+# 1. On pull request raised to development branch
+# 2. On pull request raised to main branch
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read
+
+on:
+  pull_request:
+    branches: ["develop", "main"]
+  push:
+    branches: ["develop", "main"]  
+
+jobs:
+  # This calls terraform-check.yaml to do TF validate and TF plan on dev environment
+  terraform-check-develop:
+    if: github.base_ref == 'develop'
+    name: "TF check for dev env"
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-check.yaml@develop
+    with:
+      env: dev
+      role-to-assume: "arn:aws:iam::201431874166:role/acs-sso-dev-oidcsrole"
+      role-session-name: "acsdevrolesession"
+      aws-region-name: "us-east-1"
+
+  # This calls terraform-check.yaml to do TF validate and TF plan on stage environment
+  terraform-check-stage:
+    name: "TF check for stage env"
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-check.yaml@develop
+    with:
+      env: stage
+      role-to-assume: "arn:aws:iam::211125677711:role/acs-sso-stage-oidcsrole"
+      role-session-name: "acsstagerolesession"
+      aws-region-name: "us-east-1"
+      aws-kms-key-arn: "arn:aws:kms:us-east-1:211125677711:key/94c6682a-9525-4cd7-8083-5d8ff4a1890f"      
+
+  # This calls terraform-check.yaml to do TF validate and TF plan on prod environment
+  # terraform-check-prod:
+  #   name: "TF check for prod env"
+  #   uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-check.yaml@develop
+  #   with:
+  #     env: prod
+  #     role-to-assume: "arn:aws:iam::ixxxx:role/xxxx"
+  #     role-session-name: "acsprodrolesession"
+  #     aws-region-name: "us-east-1"

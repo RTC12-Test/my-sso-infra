@@ -1,0 +1,45 @@
+name: Apply
+# Runs the workflow on the below events:
+# 1. On push event to develop branch
+# 2. On push event to main branch
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read
+
+on:
+  push:
+    branches: ["main", "develop"]
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Target environment"
+        required: true
+        type: choice
+        options:
+          - stage
+          - dev
+          - prod
+
+jobs:
+  # This calls terraform-apply.yaml to do TF apply on dev environment
+  terraform-apply-develop:
+    name: Terraform apply develop
+    if: github.ref == 'refs/heads/develop'
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@develop
+    with:
+      env: dev
+      role-to-assume: "arn:aws:iam::201431874166:role/acs-sso-dev-oidcsrole"
+      role-session-name: "acsdevrolesession"
+      aws-region-name: "us-east-1"
+
+  # This calls terraform-apply.yaml to do TF apply on stage environment
+  terraform-apply-stage:
+    name: Terraform apply stage
+    if: github.ref == 'refs/heads/main'
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@develop
+    with:
+      env: stage
+      role-to-assume: "arn:aws:iam::211125677711:role/acs-sso-stage-oidcsrole"
+      role-session-name: "acsstagerolesession"
+      aws-region-name: "us-east-1"
+      aws-kms-key-arn: "arn:aws:kms:us-east-1:211125677711:key/94c6682a-9525-4cd7-8083-5d8ff4a1890f"

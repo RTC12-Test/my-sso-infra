@@ -1,0 +1,47 @@
+# 1. This file handles sops decryption
+# 2. This composite runner file 
+name: 'Sops'
+description: 'Sops decryption'
+inputs:
+      aws-kms-key-arn:
+        description: "AWS kms key arn to decrypt the secrets"
+        required: false
+        default: arn:aws:kms:us-east-1:637423277544:key/76826c40-ca8d-44a1-9b1e-5a5bd3c75e8a
+      env:
+        description: "Env name"
+        required: true
+
+runs:
+  using: "composite"
+  steps:
+      # Checkout the project
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
+      # Installing Sops binary
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@v1.6.0
+        with:
+          version: "3.8.1" # Default version is the latest stable version 
+        id: install
+
+      # Decrypting the Sops file
+      - name: Sops decrypt
+        run: |
+          sops -d --kms ${{ inputs.aws-kms-key-arn }} ./infra/terraform/config_env/${{ inputs.env }}/secrets.enc.yaml > ./infra/terraform/config_env/secrets.yaml
+        shell: bash
+
+      # Reading the secrets.yaml
+      - name: Read the secrets yaml
+        uses: pietrobolcato/action-read-yaml@1.1.0
+        id: ssh_prv_key
+        with:
+          config: ./infra/terraform/config_env/secrets.yaml
+
+      # Copying the secrets to SSH folder
+      - name: Copying the secrets to SSH folder
+        run: |
+          mkdir $HOME/.ssh
+          echo "${{ steps.ssh_prv_key.outputs['SSH_PRV_KEY'] }}"  >> $HOME/.ssh/id_ed25519
+          chmod 400 $HOME/.ssh/id_ed25519
+        shell: bash
