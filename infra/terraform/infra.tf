@@ -55,10 +55,13 @@ module "efs" {
 
 # Module for VPC Endpoint
 module "vpc_endpoint" {
+  org_name                      = lookup(local.configs, "org_name")
+  app_name                      = lookup(local.configs, "app_name")
   source                        = "./modules/vpn-endpoint"
   aws_vpc_endpoint_sg_ids       = [module.security_group.aws_sg_id["ecs"], module.security_group.aws_sg_id["sg-comman"]]
   aws_vpc_endpoint_subnet       = lookup(local.configs, "aws_subnet")
   aws_vpc_endpoint_service_name = lookup(local.configs, "aws_vpc_endpoint_service_name")
   aws_vpc_id                    = lookup(local.configs, "aws_vpc_id")
   default_tags                  = local.default_tags
+  env                           = terraform.workspace
 }

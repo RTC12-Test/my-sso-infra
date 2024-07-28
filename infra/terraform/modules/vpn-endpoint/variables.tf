@@ -28,3 +28,18 @@ variable "default_tags" {
   type        = map(string)
   default     = {}
 }
+variable "env" {
+  description = "Environment"
+  type        = string
+  default     = ""
+}
+variable "app_name" {
+  description = "Application name"
+  type        = string
+  default     = ""
+}
+variable "org_name" {
+  description = "Organization name"
+  type        = string
+  default     = ""
+}
