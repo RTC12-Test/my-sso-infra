@@ -38,6 +38,9 @@ on:
       ACS_PAT_SELF_HOSTED_RUNNER_REGISTRATION:
         description: "token for self-hosted runner"
         required: false
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read
 
   
 jobs:
