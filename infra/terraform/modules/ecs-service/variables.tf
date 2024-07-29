@@ -36,7 +36,7 @@ variable "aws_ecs_cluster_id" {
 variable "aws_ecs_service_sg_id" {
   description = "Security groups associated with the task or service. If you do not specify a security group, the default security group for the VPC is used."
   type        = list(string)
-  default     = ""
+  default     = [""]
 }
 variable "aws_ecs_cluster_name" {
   description = "The name of the ECS cluster"
