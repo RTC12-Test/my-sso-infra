@@ -66,11 +66,6 @@ resource "aws_codedeploy_deployment_group" "codedeploy_group" {
     deployment_option = var.aws_codedeploy_deployment_option
     deployment_type   = var.aws_codedeploy_deployment_type
   }
-  trigger_configuration {
-    trigger_events     = var.aws_codedeploy_trigger_events
-    trigger_name       = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-trigger_name"
-    trigger_target_arn = var.aws_sns_topic_arn
-  }
   ecs_service {
     cluster_name = var.aws_ecs_cluster_name
     service_name = aws_ecs_service.ecs_service.name
