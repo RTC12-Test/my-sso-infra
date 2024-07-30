@@ -72,9 +72,9 @@ jobs:
 
       # Replace image tag in json file
       - name: Replacing image tag in json file
-        if: ${{ github.repository != 'RTC12-Test/my-sso-infra' }}
+        if: ${{ github.repository != 'AmericanChemicalSociety/acs-sso-infra' }}
         run: |
-          sed -i 's/$docker_image_tag"/${{ inputs.docker-image-tag }}"/' service-${{ inputs.service-name}}.json
+          sed -i 's/"$docker-image-tag"/"${{ inputs.docker-image-tag }}"/' ./infra/terraform/config_env/${{ inputs.env }}/config.yaml
       
       # Install Terraform CLI
       - name: Terraform install
