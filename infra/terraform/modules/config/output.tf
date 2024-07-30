@@ -11,6 +11,6 @@ output "secrets" {
   value = local.secrets
 }
 output "taskdefintionfile" {
-  value     = "${path.module}/task-definition-json.tpl"
-  sensitive = true
+  value = "${path.module}/task-definition-json.tpl"
+  # sensitive = true
 }
