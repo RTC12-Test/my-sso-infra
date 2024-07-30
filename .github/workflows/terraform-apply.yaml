@@ -46,7 +46,7 @@ jobs:
   # This job runs Terraform Plan
   plan:
     name: Plan (${{ inputs.env }})
-    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-plan.yaml@develop
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-plan.yaml@feature/task
     with:
       env: ${{ inputs.env }}
       role-to-assume: ${{ inputs.role-to-assume }}
