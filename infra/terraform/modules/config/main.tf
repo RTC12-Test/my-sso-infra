@@ -12,14 +12,13 @@ locals {
   sops_file_exists = fileexists(local.sops_source_file)
   secrets          = local.sops_file_exists ? data.sops_file.secrets[0].data : {}
   default_tags = merge(var.default_tags, {
-    "environment"              = local.environment
-    "org"                      = var.org_name
-    "application"              = var.app_name
-    "aws-migration-project-id" = var.aws-migration-project-id
-    "division"                 = var.division
-    "technicalContact"         = var.technicalContact
-    "tier"                     = local.environment
-    "department"               = var.department
+    "environment"      = local.environment
+    "org"              = var.org_name
+    "application"      = var.app_name
+    "division"         = var.division
+    "technicalContact" = var.technicalContact
+    "tier"             = local.environment
+    "department"       = var.department
   })
 
   # Define template variables to use in template file

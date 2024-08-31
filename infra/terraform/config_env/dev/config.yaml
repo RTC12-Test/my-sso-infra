@@ -48,3 +48,62 @@ aws_sg_configuration:
          aws_reference_sg: [""] 
          aws_reference_sg_id: [""]
 
+dlsecret:
+  [
+    {
+      name: "sso_db_cloud",
+      id: 11166,
+      fields: ["server", "username", "password"],
+    },
+    {
+      name: "emeta_database_cloud",
+      id: 11156,
+      fields: ["server", "username", "password"],
+    },
+    {
+      name: "acs1_ldap",
+      id: 11158,
+      fields: ["domain", "username", "password"],
+    },
+    {
+      name: "bridge_account",
+      id: 11160,
+      fields: ["client-id", "client-secret"],
+    },
+    { name: "cas_ldap", id: 11159, fields: ["domain", "username", "password"] },
+    {
+      name: "ssooauth",
+      id: 11162,
+      fields: ["client-id", "client-secret", "tenant"],
+    },
+    {
+      name: "mulesoft_api",
+      id: 11161,
+      fields: ["client-id", "client-secret", "tenant"],
+    },
+    {
+      name: "KESTORE_PRIVATE_KEY",
+      id: 11164,
+      fields: ["resource", "password"],
+    },
+    { 
+      name: "KEYSTORE_PASSWORD", 
+      id: 11163, 
+      fields: ["password"] 
+    },
+    { 
+      name: "signingkey", 
+      id: 11157, 
+      fields: ["pin-code"] 
+    },
+    { 
+      name: "acs_wildcard_crt", 
+      id: 11381, 
+      fields: ["private-key","certificate"] 
+    },
+    { 
+      name: "acs_wildcard_bundle_crt_tls", 
+      id: 11407, 
+      fields: ["certificate"] 
+    },
+  ]

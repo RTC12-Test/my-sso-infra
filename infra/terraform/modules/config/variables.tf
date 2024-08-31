@@ -17,11 +17,6 @@ variable "default_tags" {
     "owner"            = "devops"
   }
 }
-variable "aws-migration-project-id" {
-  description = "Tag for aws migration id"
-  type        = string
-  default     = ""
-}
 variable "division" {
   description = "Tag for division"
   type        = string
@@ -51,12 +46,4 @@ variable "enable_config_secrets" {
   description = "Inject secrets into config templates"
   type        = bool
   default     = false
-}
-variable "sg_comman" {
-  type    = string
-  default = ""
-}
-variable "efs_id" {
-  type    = string
-  default = ""
 }
