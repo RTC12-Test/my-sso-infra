@@ -7,13 +7,22 @@ resource "aws_ecs_task_definition" "task_definition" {
   memory                   = var.aws_ecs_task_definition_memory
   execution_role_arn       = var.aws_task_execution_role
   task_role_arn            = var.aws_task_execution_role
-  container_definitions    = templatefile(var.task_definition_file, var.task_definition_variables)
-  volume {
-    name = var.aws_taskdefinition_volume_name
-    efs_volume_configuration {
-      file_system_id     = var.aws_efs_id
-      root_directory     = var.session_path
-      transit_encryption = var.aws_taskdefinition_volume_encryption
+  container_definitions    = templatefile(var.task_definition_file, local.task_definition_vars)
+  dynamic "volume" {
+    for_each = try(var.task_definition_variables.volumes.bind, null)
+    content {
+      name = volume.value.name
+    }
+  }
+  dynamic "volume" {
+    for_each = try(var.task_definition_variables.volumes.efs, null)
+    content {
+      name = volume.value.name
+      efs_volume_configuration {
+        file_system_id     = volume.value.efs_id
+        root_directory     = volume.value.session_path != "" ? volume.value.session_path : var.session_path
+        transit_encryption = var.aws_taskdefinition_volume_encryption
+      }
     }
   }
   tags = merge(var.default_tags, {

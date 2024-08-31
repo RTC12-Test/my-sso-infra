@@ -49,29 +49,27 @@ variable "map_migrated_tag" {
 variable "task_definition_file" {
   description = "Task Definition file"
   type        = any
-  # default     = "${path.module}/task-defnition-json.tpl"
+  default     = ""
 }
 variable "task_definition_variables" {
   description = "Task Definition variables"
   default     = null
 }
-variable "aws_taskdefinition_volume_name" {
-  description = "Name of the volume. This name is referenced in the sourceVolume parameter of container definition in the mountPoints section."
-  type        = string
-  default     = "mounting"
+variable "file_name" {
+  default = "$filename"
 }
-variable "aws_efs_id" {
-  description = "ID of the EFS File System."
+variable "aws_region" {
+  description = "AWS region name"
   type        = string
   default     = ""
 }
 variable "session_path" {
-  description = "Directory within the Amazon EFS file system to mount as the root directory inside the host. If this parameter is omitted, the root of the Amazon EFS volume will be used. Specifying / will have the same effect as omitting this parameter."
+  description = "Directory within the Amazon EFS file system to mount as the root directory inside the host. If this parameter is omitted, the root of the Amazon EFS volume will be used. Specifying / will have the same effect as omitting this parameter"
   type        = string
   default     = "/"
 }
 variable "aws_taskdefinition_volume_encryption" {
-  description = "Whether or not to enable encryption for Amazon EFS data in transit between the Amazon ECS host and the Amazon EFS server. Transit encryption must be enabled if Amazon EFS IAM authorization is used. Valid values: ENABLED, DISABLED. If this parameter is omitted, the default value of DISABLED is used."
+  description = "Whether or not to enable encryption for Amazon EFS data in transit between the Amazon ECS host and the Amazon EFS server. Transit encryption must be enabled if Amazon EFS IAM authorization is used. Valid values: ENABLED, DISABLED. If this parameter is omitted, the default value of DISABLED is used"
   type        = string
   default     = "ENABLED"
 }
