@@ -21,6 +21,7 @@
         }%{ if key != (keys(container.environment)[length(container.environment)-1]) },%{ endif }
       %{ endfor }
     ],
+    %{ endif }
     %{ if lookup(container, "secrets", null) != null }
     "sercrets": [
       %{ for key, value in container.secrets }
