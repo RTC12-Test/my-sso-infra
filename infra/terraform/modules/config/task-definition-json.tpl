@@ -23,7 +23,7 @@
     ],
     %{ endif }
     %{ if lookup(container, "secrets", null) != null }
-    "sercrets": [
+    "secrets": [
       %{ for key, value in container.secrets }
         {
           "name": "${key}",
