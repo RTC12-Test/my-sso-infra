@@ -9,13 +9,13 @@ resource "aws_ecs_task_definition" "task_definition" {
   task_role_arn            = var.aws_task_execution_role
   container_definitions    = templatefile(var.task_definition_file, local.task_definition_vars)
   dynamic "volume" {
-    for_each = try(var.task_definition_variables.volumes.bind, null)
+    for_each = try(var.task_definition_variables.volumes.bind, {})
     content {
       name = volume.value.name
     }
   }
   dynamic "volume" {
-    for_each = try(var.task_definition_variables.volumes.efs, null)
+    for_each = try(var.task_definition_variables.volumes.efs, {})
     content {
       name = volume.value.name
       efs_volume_configuration {
