@@ -22,6 +22,7 @@ resource "aws_ecs_task_definition" "task_definition" {
         file_system_id     = volume.value.efs_id
         root_directory     = volume.value.session_path != "" ? volume.value.session_path : var.session_path
         transit_encryption = var.aws_taskdefinition_volume_encryption
+
       }
     }
   }

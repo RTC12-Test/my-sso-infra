@@ -3,7 +3,7 @@ region: "us-east-1"
 org_name: "rtcek"
 app_name: "sso"
 aws_vpc_id: "vpc-080a56a3aed67fe15"
-aws_subnet: ["subnet-0cb38996848fd445f", "subnet-03b603c553367164c", "subnet-0ccdcb1b28b0b0505", "subnet-07d777b42f84d0549", "subnet-0e26e9bee5ad56648"]
+aws_subnet: ["subnet-071d4c53cac27879f","subnet-05cac359db01d4243","subnet-056275e2497e3d297","subnet-0a10ba0e5a4ad8ea9","subnet-0ff18f2af5b9ab7c0","subnet-09d229ef6fd031d28"]
 
 # lambda
 aws_lambda_role_arn: "arn:aws:iam::637423277544:role/rtctek-app_name-dev-lambdafunctionrole04"
