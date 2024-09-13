@@ -26,16 +26,9 @@ resource "aws_lambda_function" "lambda_function" {
       security_group_ids = vpc_config.value.sg_id
     }
   }
-  dynamic "file_system_config" {
-    for_each = try(var.aws_lb_vpc, {})
-    content {
-      arn              = var.aws_efs_access_point_arn
-      local_mount_path = var.aws_lambda_mount_point
-    }
-  }
-  tags = {
-    Name         = "${var.org_name}-${var.app_name}-${terraform.workspace}-efs"
-    map-migrated = var.map_migrated_tag
+  file_system_config {
+    arn              = var.aws_efs_access_point_arn
+    local_mount_path = var.aws_lambda_mount_point
   }
 }
 
