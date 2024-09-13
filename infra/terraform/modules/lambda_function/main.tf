@@ -11,7 +11,7 @@ resource "aws_lambda_function" "lambda_function" {
   function_name    = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-lambda"
   package_type     = var.aws_lambda_type
   image_uri        = try(var.aws_image_url, null)
-  filename         = var.aws_image_url == null ? null : "${module.root}/python_script.zip"
+  filename         = var.aws_image_url == null ? null : "${path.root}/python_script.zip"
   handler          = var.aws_lf_handler
   runtime          = var.aws_lf_runtime
   role             = var.aws_iam_lambda_role
