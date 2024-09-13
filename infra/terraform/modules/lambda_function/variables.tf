@@ -101,7 +101,7 @@ variable "aws_efs_access_point_arn" {
 variable "aws_lambda_mount_point" {
   description = "efs mounting point directory"
   type        = string
-  default     = "/mnt/"
+  default     = "/mnt/efs"
 }
 variable "aws_s3_trigger" {
   description = "s3 flag trigger"
