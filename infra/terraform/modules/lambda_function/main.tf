@@ -28,7 +28,7 @@ resource "aws_lambda_function" "lambda_function" {
   }
   file_system_config {
     arn              = var.aws_efs_access_point_arn
-    local_mount_path = var.aws_lambda_mount_point
+    local_mount_path = "/mnt/efs"
   }
 }
 
