@@ -80,8 +80,8 @@ variable "aws_image_url" {
 }
 variable "aws_lb_vpc" {
   description = "Contains maps of security and subnets-id"
-  type        = string
-  default     = "False"
+  type        = any
+  default     = null
 }
 variable "aws_lb_vpc_configuration" {
   description = "vpc configuration flag"
