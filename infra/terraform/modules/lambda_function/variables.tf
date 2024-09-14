@@ -61,7 +61,7 @@ variable "archive_output_path" {
 variable "aws_lf_timeout" {
   description = "Amount of time your Lambda Function has to run in seconds. Defaults to 3. See Limits"
   type        = string
-  default     = "10"
+  default     = "180"
 }
 variable "aws_image_url" {
   description = "Container image url"
