@@ -16,7 +16,6 @@ module "config" {
   technicalContact      = lookup(local.configs, "technicalContact")
 }
 
-
 # # Calling Delinea module
 # module "delinea" {
 #   source             = "./modules/delinea"

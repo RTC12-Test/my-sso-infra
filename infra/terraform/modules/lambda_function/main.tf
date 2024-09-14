@@ -17,7 +17,6 @@ resource "aws_lambda_function" "lambda_function" {
   role             = var.aws_iam_lambda_role
   source_code_hash = var.aws_lambda_type == "Image" ? null : data.archive_file.zip_the_code[0].output_base64sha256
   timeout          = var.aws_lf_timeout
-
   # VPC config for efs 
   dynamic "vpc_config" {
     for_each = var.aws_lb_vpc_enable ? 1 : {}
@@ -27,14 +26,14 @@ resource "aws_lambda_function" "lambda_function" {
     }
   }
   dynamic "file_system_config" {
-    for_each = var.aws_lb_system_enable ? 1 : {}
+    for_each = var.aws_lb_fs_enable ? 1 : {}
     content {
       arn              = var.aws_efs_access_point_arn
       local_mount_path = var.aws_lambda_mount_point
     }
   }
   tags = {
-    Name         = "${var.org_name}-${var.app_name}-${terraform.workspace}-efs"
+    Name         = "${var.org_name}-${var.app_name}-${terraform.workspace}-lambda"
     map-migrated = var.map_migrated_tag
   }
 }

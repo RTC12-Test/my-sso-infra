@@ -43,11 +43,6 @@ variable "aws_lambda_filename" {
   type        = string
   default     = null
 }
-variable "subnet" {
-  description = "subnet for lambda function"
-  type        = string
-  default     = ""
-}
 variable "aws_lambda_type" {
   description = "lambda type"
   type        = string
@@ -66,12 +61,7 @@ variable "archive_output_path" {
 variable "aws_lf_timeout" {
   description = "Amount of time your Lambda Function has to run in seconds. Defaults to 3. See Limits"
   type        = string
-  default     = "180"
-}
-variable "package_type" {
-  description = "package type of lambda function"
-  type        = string
-  default     = "Zip"
+  default     = "10"
 }
 variable "aws_image_url" {
   description = "Container image url"
@@ -93,7 +83,7 @@ variable "aws_lb_sg_ids" {
   type        = list("")
   default     = [""]
 }
-variable "aws_lb_system_enable" {
+variable "aws_lb_fs_enable" {
   description = "Enable vpc file system for AWS lambda function"
   type        = bool
   default     = false
