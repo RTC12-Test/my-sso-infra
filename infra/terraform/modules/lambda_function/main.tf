@@ -10,8 +10,8 @@ data "archive_file" "zip_the_code" {
 resource "aws_lambda_function" "lambda_function" {
   function_name    = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-lambda"
   package_type     = var.aws_lambda_type
-  image_uri        = var.aws_image_url
-  filename         = var.aws_image_url != null ? null : "${path.root}/python_script.zip"
+  image_uri        = try(var.aws_image_url, null)
+  filename         = var.aws_image_url == null ? null : "${python.root}/python_script.zip"
   handler          = var.aws_lf_handler
   runtime          = var.aws_lf_runtime
   role             = var.aws_iam_lambda_role
@@ -20,15 +20,22 @@ resource "aws_lambda_function" "lambda_function" {
 
   # VPC config for efs 
   dynamic "vpc_config" {
-    for_each = try(var.aws_lb_vpc, {})
+    for_each = var.aws_lb_vpc_enable ? 1 : {}
     content {
-      subnet_ids         = vpc_config.value.subnet_ids
-      security_group_ids = vpc_config.value.sg_id
+      subnet_ids         = var.aws_lb_subnets
+      security_group_ids = var.aws_lb_sg_ids
     }
   }
-  file_system_config {
-    arn              = var.aws_efs_access_point_arn
-    local_mount_path = "/mnt/efs"
+  dynamic "file_system_config" {
+    for_each = var.aws_lb_system_enable ? 1 : {}
+    content {
+      arn              = var.aws_efs_access_point_arn
+      local_mount_path = var.aws_lambda_mount_point
+    }
+  }
+  tags = {
+    Name         = "${var.org_name}-${var.app_name}-${terraform.workspace}-efs"
+    map-migrated = var.map_migrated_tag
   }
 }
 

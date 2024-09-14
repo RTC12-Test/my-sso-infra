@@ -78,10 +78,25 @@ variable "aws_image_url" {
   type        = string
   default     = null
 }
-variable "aws_lb_vpc" {
-  description = "Contains maps of security and subnets-id"
-  type        = any
-  default     = null
+variable "aws_lb_vpc_enable" {
+  description = "Enable vpc config block for AWS lambda function"
+  type        = bool
+  default     = false
+}
+variable "aws_lb_subnets" {
+  description = "List of subnet IDs associated with the Lambda function"
+  type        = list(string)
+  default     = [""]
+}
+variable "aws_lb_sg_ids" {
+  description = "List of security group IDs associated with the Lambda function"
+  type        = list("")
+  default     = [""]
+}
+variable "aws_lb_system_enable" {
+  description = "Enable vpc file system for AWS lambda function"
+  type        = bool
+  default     = false
 }
 variable "aws_lb_vpc_configuration" {
   description = "vpc configuration flag"
