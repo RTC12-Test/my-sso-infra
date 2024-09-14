@@ -80,7 +80,7 @@ variable "aws_lb_subnets" {
 }
 variable "aws_lb_sg_ids" {
   description = "List of security group IDs associated with the Lambda function"
-  type        = list("")
+  type        = list(string)
   default     = [""]
 }
 variable "aws_lb_fs_enable" {
