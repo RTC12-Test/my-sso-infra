@@ -31,12 +31,12 @@ variable "env" {
 variable "aws_lf_runtime" {
   description = "Identifier of the function's runtime. See Runtimes for vali"
   type        = string
-  default     = "python3.8"
+  default     = null
 }
 variable "aws_lf_handler" {
   description = "Function entrypoint in your code."
   type        = string
-  default     = "index.handler"
+  default     = null
 }
 variable "aws_lambda_filename" {
   description = "filename for lambda function"
