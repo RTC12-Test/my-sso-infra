@@ -19,14 +19,14 @@ resource "aws_lambda_function" "lambda_function" {
   timeout          = var.aws_lf_timeout
   # VPC config for efs 
   dynamic "vpc_config" {
-    for_each = var.aws_lb_vpc_enable ? 1 : null
+    for_each = var.aws_lb_vpc_enable ? [1] : []
     content {
       subnet_ids         = var.aws_lb_subnets
       security_group_ids = var.aws_lb_sg_ids
     }
   }
   dynamic "file_system_config" {
-    for_each = var.aws_lb_fs_enable ? 1 : null
+    for_each = var.aws_lb_fs_enable ? [1] : []
     content {
       arn              = var.aws_efs_access_point_arn
       local_mount_path = var.aws_lambda_mount_point
