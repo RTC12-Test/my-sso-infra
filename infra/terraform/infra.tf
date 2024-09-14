@@ -59,7 +59,7 @@ module "efs" {
   app_name                        = lookup(local.configs, "app_name")
   aws_vpc_efs_subnets             = lookup(local.configs, "aws_subnet")
   map_migrated_tag                = lookup(local.configs, "map_migrated_tag")
-  aws_efs_mount_security_group_id = ["sg-07aa695a937f8599d"]
+  aws_efs_mount_security_group_id = ["sg-00ad135f2594702bc"]
   aws_access_point_enable         = true
 }
 
