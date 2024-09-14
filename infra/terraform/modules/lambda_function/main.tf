@@ -65,7 +65,7 @@ resource "aws_lambda_permission" "s3_invoke" {
 # S3 Bucket Notification for Lambda Trigger
 resource "aws_s3_bucket_notification" "s3_trigger" {
   count  = var.aws_s3_trigger ? 1 : 0
-  bucket = "${var.org_name}-${var.app_name}-${terraform.workspace}-s3-notifation"
+  bucket = var.aws_s3_bucket_id
   lambda_function {
     lambda_function_arn = aws_lambda_function.lambda_function.arn
     events              = var.aws_s3_no_events
