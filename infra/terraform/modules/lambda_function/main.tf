@@ -12,8 +12,8 @@ resource "aws_lambda_function" "lambda_function" {
   package_type     = var.aws_lambda_type
   image_uri        = try(var.aws_image_url, null)
   filename         = var.aws_image_url != null ? null : "${path.root}/python_script.zip"
-  handler          = var.aws_lf_handler
-  runtime          = var.aws_lf_runtime
+  handler          = var.aws_lambda_type == "Image" ? null : var.aws_lf_handler
+  runtime          = var.aws_lambda_type == "Image" ? null : var.aws_lf_runtime
   role             = var.aws_iam_lambda_role
   source_code_hash = var.aws_lambda_type == "Image" ? null : data.archive_file.zip_the_code[0].output_base64sha256
   timeout          = var.aws_lf_timeout
