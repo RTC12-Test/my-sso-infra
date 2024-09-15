@@ -36,7 +36,7 @@ variable "aws_lf_runtime" {
 variable "aws_lf_handler" {
   description = "Function entrypoint in your code."
   type        = string
-  default     = "index.handler"
+  default     = "lambda_function.handler"
 }
 variable "aws_lambda_filename" {
   description = "filename for lambda function"
@@ -92,11 +92,6 @@ variable "aws_lb_vpc_configuration" {
   description = "vpc configuration flag"
   type        = any
   default     = null
-}
-variable "efs_configuration" {
-  description = "efs configuration flag"
-  type        = string
-  default     = "False"
 }
 variable "aws_efs_access_point_arn" {
   description = "efs access point arn"
