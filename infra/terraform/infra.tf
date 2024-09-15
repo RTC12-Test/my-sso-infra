@@ -62,3 +62,17 @@ module "efs" {
   aws_access_point_enable         = true
 }
 
+module "lambda" {
+  source              = "./modules/lambda_function"
+  env                 = terraform.workspace
+  default_tags        = local.default_tags
+  org_name            = lookup(local.configs, "org_name")
+  app_name            = lookup(local.configs, "app_name")
+  map_migrated_tag    = lookup(local.configs, "map_migrated_tag")
+  aws_lb_subnets      = lookup(local.configs, "aws_subnet")
+  aws_lambda_filename = lookup(local.configs, "aws_lambda_filename")
+  archive_source_dir  = lookup(local.configs, "archive_source_dir")
+  archive_output_path = lookup(local.configs, "archive_output_path")
+  aws_lambda_type     = lookup(local.configs, "aws_lambda_type")
+}
+
