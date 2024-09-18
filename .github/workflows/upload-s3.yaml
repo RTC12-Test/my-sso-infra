@@ -2,15 +2,38 @@ name: Upload zip to S3
 on:
   workflow_call:
     inputs:
-      hello: 
-          description: ""
-          type: string
+      role-to-assume:
+        description: "AWS Role arn"
+        type: string
+        required: true
+      role-session-name:
+        description: "AWS Role session name"
+        type: string
+        required: true
+      aws-region-name:
+        description: "AWS region name"
+        type: string
+        required: true
+      aws-lambda-artifact-filename:
+        description: "Filname of lambda zip"
+        type: string
+        required: false
+        default: ""
       
 jobs:
   s3_upload:
     runs-on: ubuntu-latest
     name: S3 Upload
     steps:
+      # Install aws cli
+      - name: Install AWS cli
+        id: install-AWS-cli
+        uses: unfor19/install-aws-cli-action@v1
+        with:
+          version: 2
+          verbose: false
+          arch: amd64
+
       # Logging to aws
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4.0.2
@@ -20,16 +43,12 @@ jobs:
           aws-region: ${{ inputs.aws-region-name }}
 
       - name: Create zip
-        uses: montudor/action-zip@v1
-        with:
-          args: zip -qq -r "${{ inputs.aws-lambda-artifact-filename }}.zip" .
+        run: |
+           zip -qq -r "${{ inputs.aws-lambda-artifact-filename }}.zip" .
 
       - name: upload s3
-        uses: keithweaver/aws-s3-github-action@v1.0.0
-        with:
-          command: "cp"
-          source: "${{ inputs.aws-lambda-artifact-filename }}.zip"
-          destination: "s3://${{inputs.aws-s3-bucket-name}}/${{ inputs.aws-s3-key-name }}"
+        run: |
+          aws s3 cp "${{ inputs.aws-lambda-artifact-filename }}.zip" "s3://${{inputs.aws-s3-bucket-name}}"
       
   
   
