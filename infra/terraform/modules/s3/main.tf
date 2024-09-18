@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "s3_bucket" {
   })
 }
 # Resource to create s3 bucket
-resource "aws_s3_object" "s3_bucket" {
+resource "aws_s3_object" "s3_key" {
   bucket = "${var.org_name}-${var.app_name}-${var.env}-${var.service_name}-bucket-key"
   key    = ""
   tags = merge(var.default_tags, {
