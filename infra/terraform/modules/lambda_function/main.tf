@@ -33,18 +33,18 @@ resource "aws_lambda_function" "lambda_function" {
 }
 
 # Resource to create lambda invocation
-resource "aws_lambda_invocation" "redeploy_lambda" {
-  count         = var.aws_lambda_type == "Zip" ? 1 : 0
-  function_name = aws_lambda_function.lambda_function.arn
-  triggers = {
-    redeployment = sha1(jsonencode([
-      var.aws_s3_output_version_id
-    ]))
-  }
-  input = jsonencode({
-    key1 = "value1"
-  })
-}
+# resource "aws_lambda_invocation" "redeploy_lambda" {
+#   count         = var.aws_lambda_type == "Zip" ? 1 : 0
+#   function_name = aws_lambda_function.lambda_function.arn
+#   triggers = {
+#     redeployment = sha1(jsonencode([
+#       var.aws_s3_output_version_id
+#     ]))
+#   }
+#   input = jsonencode({
+#     key1 = "value1"
+#   })
+# }
 
 # Lambda Permission for S3
 resource "aws_lambda_permission" "s3_invoke" {
