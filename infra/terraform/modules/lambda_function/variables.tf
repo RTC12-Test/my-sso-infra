@@ -48,6 +48,11 @@ variable "aws_lambda_s3_key" {
   type        = string
   default     = "python.zip"
 }
+variable "aws_lambda_s3_key_hash" {
+  description = "S3 key of an object containing the function's deployment package. When s3_bucket is set, s3_key is required"
+  type        = string
+  default     = ""
+}
 variable "aws_lambda_type" {
   description = "lambda type"
   type        = string
