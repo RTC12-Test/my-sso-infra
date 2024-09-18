@@ -35,7 +35,7 @@ resource "aws_lambda_function" "lambda_function" {
 # Resource to create lambda invocation
 resource "aws_lambda_invocation" "redeploy_lambda" {
   count         = var.aws_lambda_type == "Zip" ? 1 : 0
-  function_name = aws_lambda_function.lambda_function.arn
+  function_name = aws_lambda_function.lambda_function.function_name
   triggers = {
     redeployment = sha1(jsonencode([
       aws_lambda_function.lambda_function.s3_key
