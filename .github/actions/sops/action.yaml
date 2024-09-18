@@ -42,6 +42,6 @@ runs:
       - name: Copying the secrets to SSH folder
         run: |
           mkdir $HOME/.ssh
-          echo "${{ steps.ssh_prv_key.outputs['SSH_PRV_KEY'] }}"  >> $HOME/.ssh/id_ed25519
+          echo "${{ steps.ssh_prv_key.outputs['SSH_PRV_KEY'] }}"  >> $HOME/.ssh/id_rsa
           chmod 400 $HOME/.ssh/id_rsa
         shell: bash
