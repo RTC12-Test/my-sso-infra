@@ -16,7 +16,7 @@ resource "aws_lambda_function" "lambda_function" {
   handler          = var.aws_lambda_type == "Image" ? null : var.aws_lf_handler
   runtime          = var.aws_lambda_type == "Image" ? null : var.aws_lf_runtime
   role             = var.aws_iam_lambda_role
-  source_code_hash = var.aws_lambda_type == "Image" ? null : filebase64sha256("../../python.zip")
+  source_code_hash = var.aws_lambda_type == "Image" ? null : filebase64sha256("python.zip")
   timeout          = var.aws_lf_timeout
   # VPC config for efs 
   dynamic "vpc_config" {
