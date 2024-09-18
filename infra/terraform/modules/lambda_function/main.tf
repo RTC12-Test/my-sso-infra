@@ -1,15 +1,16 @@
 # Resouce to create lambda function
 resource "aws_lambda_function" "lambda_function" {
-  function_name    = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-lambda"
-  package_type     = var.aws_lambda_type
-  image_uri        = try(var.aws_image_url, null)
-  s3_bucket        = var.aws_lambda_type == "Image" ? null : var.aws_lambda_s3_name
-  s3_key           = var.aws_lambda_type == "Image" ? null : var.aws_lambda_s3_key
-  handler          = var.aws_lambda_type == "Image" ? null : var.aws_lf_handler
-  runtime          = var.aws_lambda_type == "Image" ? null : var.aws_lf_runtime
-  role             = var.aws_iam_lambda_role
-  source_code_hash = var.aws_lambda_type == "Image" ? null : filebase64sha256("python.zip")
-  timeout          = var.aws_lf_timeout
+  function_name = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-lambda"
+  package_type  = var.aws_lambda_type
+  image_uri     = try(var.aws_image_url, null)
+  s3_bucket     = var.aws_lambda_type == "Image" ? null : var.aws_lambda_s3_name
+  s3_key        = var.aws_lambda_type == "Image" ? null : var.aws_lambda_s3_key
+  handler       = var.aws_lambda_type == "Image" ? null : var.aws_lf_handler
+  runtime       = var.aws_lambda_type == "Image" ? null : var.aws_lf_runtime
+  role          = var.aws_iam_lambda_role
+  # source_code_hash = var.aws_lambda_type == "Image" ? null : filebase64sha256("python.zip")
+  s3_object_version = var.aws_lambda_type == "Image" ? null : var.aws_s3_output_version_id
+  timeout           = var.aws_lf_timeout
   # VPC config for efs 
   dynamic "vpc_config" {
     for_each = var.aws_lb_vpc_enable ? [1] : []

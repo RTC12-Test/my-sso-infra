@@ -163,3 +163,6 @@ variable "map_migrated_tag" {
   type        = string
   default     = ""
 }
+variable "aws_s3_output_version_id" {
+  default = ""
+}
