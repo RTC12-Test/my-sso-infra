@@ -30,6 +30,10 @@ jobs:
     runs-on: ubuntu-latest
     name: S3 Upload
     steps:
+      # Checkout the project
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
       # Install aws cli
       - name: Install AWS cli
         id: install-AWS-cli
