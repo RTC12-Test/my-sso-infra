@@ -28,7 +28,7 @@ runs:
       # Decrypting the Sops file
       - name: Sops decrypt
         run: |
-          sops -d --kms ${{ inputs.aws-kms-key-arn }} ./infra/terraform/config_env/${{ inputs.env }}/secrets.enc.yaml > ./infra/terraform/config_env/secrets.yaml
+          sops -d  ./infra/terraform/config_env/${{ inputs.env }}/secrets.enc.yaml > ./infra/terraform/config_env/secrets.yaml
         shell: bash
 
       # Reading the secrets.yaml

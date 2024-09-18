@@ -65,7 +65,7 @@ jobs:
       # Composite runner
       - name: Use sops workflow file
         if: ${{ inputs.sops-enable == true }}
-        uses: RTC12-Test/my-sso-infra/.github/actions/sops@develop
+        uses: RTC12-Test/my-sso-infra/.github/actions/sops@feature/secrets
         with:
          aws-kms-key-arn : ${{ inputs.aws-kms-key-arn }}
          env: ${{ inputs.env }}
