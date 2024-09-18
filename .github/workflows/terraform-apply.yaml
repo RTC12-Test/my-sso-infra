@@ -84,11 +84,11 @@ jobs:
          aws-kms-key-arn : ${{ inputs.aws-kms-key-arn }}
          env: ${{ inputs.env }}
 
-      # Replace image tag in json file
-      - name: Replacing image tag in json file
-        if: ${{ github.repository != 'RTC12-Test/my-sso-infra' }}
-        run: |
-          sed -i 's/$docker_image_tag"/${{ inputs.docker-image-tag }}"/' service-${{ inputs.service-name}}.json
+      # # Replace image tag in json file
+      # - name: Replacing image tag in json file
+      #   if: ${{ github.repository != 'RTC12-Test/my-sso-infra' }}
+      #   run: |
+      #     sed -i 's/$docker_image_tag"/${{ inputs.docker-image-tag }}"/' service-${{ inputs.service-name}}.json
 
       # Install terraform cli
       - name: Terraform install
