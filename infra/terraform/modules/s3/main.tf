@@ -11,7 +11,7 @@ resource "aws_s3_object" "s3_object" {
   count  = true ? 1 : 0
   bucket = aws_s3_bucket.s3_bucket.id
   key    = "python"
-  source = "python.zip"
+  source = "../../python.zip"
 }
 resource "aws_s3_bucket_versioning" "s3_versioning" {
   count  = true ? 1 : 0
