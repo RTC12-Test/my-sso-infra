@@ -1,14 +1,14 @@
 # Resouce to create lambda function
 resource "aws_lambda_function" "lambda_function" {
-  function_name = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-lambda"
-  package_type  = var.aws_lambda_type
-  image_uri     = try(var.aws_image_url, null)
-  s3_bucket     = var.aws_lambda_type == "Image" ? null : var.aws_lambda_s3_name
-  s3_key        = var.aws_lambda_type == "Image" ? null : var.aws_lambda_s3_key
-  handler       = var.aws_lambda_type == "Image" ? null : var.aws_lf_handler
-  runtime       = var.aws_lambda_type == "Image" ? null : var.aws_lf_runtime
-  role          = var.aws_iam_lambda_role
-  # source_code_hash = var.aws_lambda_type == "Image" ? null : filebase64sha256("python.zip")
+  function_name     = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-lambda"
+  package_type      = var.aws_lambda_type
+  image_uri         = try(var.aws_image_url, null)
+  s3_bucket         = var.aws_lambda_type == "Image" ? null : var.aws_lambda_s3_name
+  s3_key            = var.aws_lambda_type == "Image" ? null : var.aws_lambda_s3_key
+  handler           = var.aws_lambda_type == "Image" ? null : var.aws_lf_handler
+  runtime           = var.aws_lambda_type == "Image" ? null : var.aws_lf_runtime
+  role              = var.aws_iam_lambda_role
+  source_code_hash  = var.aws_lambda_type == "Image" ? null : filebase64sha256("python.zip")
   s3_object_version = var.aws_lambda_type == "Image" ? null : var.aws_s3_output_version_id
   timeout           = var.aws_lf_timeout
   # VPC config for efs 
@@ -35,12 +35,12 @@ resource "aws_lambda_function" "lambda_function" {
 # Resource to create lambda invocation
 resource "aws_lambda_invocation" "redeploy_lambda" {
   count         = var.aws_lambda_type == "Zip" ? 1 : 0
-  function_name = aws_lambda_function.lambda_function.function_name
-  # triggers = {
-  #   redeployment = sha1(jsonencode([
-  #     aws_lambda_function.lambda_function.s3_key
-  #   ]))
-  # }
+  function_name = aws_lambda_function.lambda_function.source_code_hash
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_lambda_function.lambda_function.source_code_hash
+    ]))
+  }
   input = jsonencode({
     key1 = "value1"
   })
