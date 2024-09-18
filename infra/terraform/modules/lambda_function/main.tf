@@ -1,10 +1,10 @@
 # Data block to zip the code
-# data "archive_file" "zip_the_code" {
-#   count       = var.aws_lambda_type == "Zip" ? 1 : 0
-#   type        = lower(var.aws_lambda_type)
-#   source_dir  = var.archive_source_dir
-#   output_path = var.archive_output_path
-# }
+data "archive_file" "zip_the_code" {
+  count       = var.aws_lambda_type == "Zip" ? 1 : 0
+  type        = lower(var.aws_lambda_type)
+  source_dir  = var.archive_source_dir
+  output_path = var.archive_output_path
+}
 
 # Resouce to create lambda function
 resource "aws_lambda_function" "lambda_function" {
