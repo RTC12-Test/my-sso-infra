@@ -38,7 +38,7 @@ resource "aws_lambda_invocation" "redeploy_lambda" {
   function_name = aws_lambda_function.lambda_function.arn
   triggers = {
     redeployment = sha1(jsonencode([
-      aws_lambda_function.lambda_function.s3_key
+      aws_lambda_function.lambda_function.s3_object_version
     ]))
   }
   input = jsonencode({
