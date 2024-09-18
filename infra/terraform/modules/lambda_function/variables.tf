@@ -38,10 +38,15 @@ variable "aws_lf_handler" {
   type        = string
   default     = "lambda_function.handler"
 }
-variable "aws_lambda_filename" {
-  description = "filename for lambda function"
+variable "aws_lambda_s3_name" {
+  description = "S3 bucket location containing the function's deployment package. This bucket must reside in the same AWS region where you are creating the Lambda function. Exactly one of filename, image_uri, or s3_bucket must be specified. When s3_bucket is set, s3_key is required"
   type        = string
-  default     = null
+  default     = ""
+}
+variable "aws_lambda_s3_key" {
+  description = "S3 key of an object containing the function's deployment package. When s3_bucket is set, s3_key is required"
+  type        = string
+  default     = "python.zip"
 }
 variable "aws_lambda_type" {
   description = "lambda type"
