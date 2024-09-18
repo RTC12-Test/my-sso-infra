@@ -14,9 +14,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-      # Checkout the project
-      - name: Checkout Project
-        uses: actions/checkout@v4
 
       # Installing Sops binary
       - name: Sops Binary Installer
