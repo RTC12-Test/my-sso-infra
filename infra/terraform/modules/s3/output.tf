@@ -12,7 +12,7 @@ output "aws_s3_bucket_arn" {
   description = "The s3 bucket arn"
   value       = aws_s3_bucket.s3_bucket.arn
 }
-# # Output of s3 bucket arn
-# output "aws_s3_bucket_key_source_arn" {
-#   
-# }
+# Output of s3 bucket arn
+output "aws_s3_object_version_id" {
+  value = aws_s3_object.s3_object.version_id
+}
