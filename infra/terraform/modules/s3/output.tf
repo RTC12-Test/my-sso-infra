@@ -14,5 +14,5 @@ output "aws_s3_bucket_arn" {
 }
 # Output of s3 bucket arn
 output "aws_s3_object_version_id" {
-  value = aws_s3_object.s3_object[length(aws_s3_object.s3_object) - 1].version_id
+  value = aws_s3_object.s3_object[length(aws_s3_object.s3_object)].version_id
 }
