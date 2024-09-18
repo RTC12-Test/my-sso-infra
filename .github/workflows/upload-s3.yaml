@@ -49,7 +49,7 @@ jobs:
 
       - name: Create zip
         run: |
-           zip -qq -r "${{ inputs.aws-lambda-artifact-filename }}.zip" .
+           zip -qq -r "${{ inputs.aws-lambda-artifact-filename }}" .
 
       - name: upload s3
         run: |
