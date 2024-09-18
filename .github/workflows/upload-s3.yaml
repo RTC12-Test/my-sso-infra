@@ -17,7 +17,12 @@ on:
       aws-lambda-artifact-filename:
         description: "Filname of lambda zip"
         type: string
-        required: false
+        required: true
+        default: ""
+      aws-s3-bucket-name:
+        description: "Name of s3 bucket"
+        type: string
+        required: true
         default: ""
       
 jobs:
