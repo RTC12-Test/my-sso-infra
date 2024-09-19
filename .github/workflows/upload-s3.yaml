@@ -53,11 +53,13 @@ jobs:
 
       - name: Create zip
         run: |
-           zip  -r "${{ inputs.aws-lambda-artifact-filename }}.zip" "${{ inputs.aws-lambda-artifact-filename }}"
+           cd python/
+           pip install -r requirements.txt
+           zip  -r "${{ inputs.aws-lambda-artifact-filename }}.zip" .
 
       - name: upload s3
         run: |
-          aws s3 cp "${{ inputs.aws-lambda-artifact-filename }}.zip" "s3://${{inputs.aws-s3-bucket-name}}"
+          aws s3 cp python.zip s3://acs-sso-dev-jks-cert-bucket 
       
   
   
