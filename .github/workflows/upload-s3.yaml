@@ -55,7 +55,7 @@ jobs:
         run: |
            cd python/
            pip install -r requirements.txt
-           zip -r python.zip .
+           zip -r ../python.zip .
 
       - name: upload s3
         run: |
