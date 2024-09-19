@@ -14,16 +14,16 @@ on:
         description: "AWS region name"
         type: string
         required: true
-      aws-lambda-artifact-filename:
-        description: "Filname of lambda zip"
-        type: string
-        required: true
-        default: ""
-      aws-s3-bucket-name:
-        description: "Name of s3 bucket"
-        type: string
-        required: true
-        default: ""
+      # aws-lambda-artifact-filename:
+      #   description: "Filname of lambda zip"
+      #   type: string
+      #   required: true
+      #   default: ""
+      # aws-s3-bucket-name:
+      #   description: "Name of s3 bucket"
+      #   type: string
+      #   required: false
+      #   default: ""
       
 jobs:
   s3_upload:
@@ -55,7 +55,7 @@ jobs:
         run: |
            cd python/
            pip install -r requirements.txt
-           zip  -r "${{ inputs.aws-lambda-artifact-filename }}.zip" .
+           zip -r python.zip .
 
       - name: upload s3
         run: |
