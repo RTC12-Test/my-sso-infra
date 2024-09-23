@@ -65,8 +65,8 @@ variable "aws_vpc_id" {
 }
 variable "aws_lb_target_group_port" {
   description = "The port the load Balancer uses when performing health checks on targets"
-  type        = string
-  default     = "traffic-port"
+  type        = number
+  default     = 0
 }
 variable "aws_lb_target_group_protocal" {
   description = "Protocol the load Balancer uses when performing health checks on targets. Must be one of TCP, HTTP, or HTTPS"
@@ -86,7 +86,7 @@ variable "aws_lb_target_group_health_path" {
 variable "aws_lb_target_group_health_port" {
   description = "The port the load Balancer uses when performing health checks on targets. Valid values are either traffic-port, to use the same port as the target group, or a valid port number between 1 and 65536. Default is traffic-port"
   type        = string
-  default     = ""
+  default     = "traffic-port"
 }
 variable "aws_load_balancing_cross_zone_enabled" {
   description = "Indicates whether cross zone load balancing is enabled"
