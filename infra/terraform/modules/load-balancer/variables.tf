@@ -46,7 +46,7 @@ variable "aws_nlb_port" {
 variable "aws_nlb_protocol" {
   description = "(May be required, Forces new resource) Protocol to use for routing traffic to the targets. Should be one of GENEVE, HTTP, HTTPS, TCP, TCP_UDP, TLS, or UDP. Required when target_type is instance, ip, or alb. Does not apply when target_type is lambda"
   type        = string
-  default     = "TLS"
+  default     = "TCP"
 }
 variable "aws_nlb_routing_type" {
   description = "Type of routing action"
