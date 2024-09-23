@@ -65,10 +65,10 @@ resource "aws_lb_listener" "https" {
     }
   }
   dynamic "default_action" {
-    for_each = var.enable_codeploy ? var.aws_target_groups : []
+    for_each = var.enable_codeploy && try(length(regex("green", aws_lb_target_group.alb_target_group[default_action.value.tg_name].name)) > 0, false) ? var.aws_target_groups : []
     content {
-      type             = try(length(regex("green", aws_lb_target_group.alb_target_group[default_action.value.tg_name].name)) > 0, false) ? "redirect" : var.aws_alb_routing_type
-      target_group_arn = try(length(regex("green", aws_lb_target_group.alb_target_group[default_action.value.tg_name].name)) > 0, false) ? "" : aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn
+      type             = var.aws_alb_routing_type
+      target_group_arn = aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn
     }
   }
   tags = merge(var.default_tags, {
