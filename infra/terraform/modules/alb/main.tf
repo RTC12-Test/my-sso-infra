@@ -21,7 +21,6 @@ resource "aws_lb" "alb" {
 
 locals {
   target_groups = { for tg in var.aws_target_groups : tg.tg_name => tg }
-  targets       = [for i in var.aws_target_groups : i.tg_name]
 }
 
 # Resource to create ALB Target Group 
@@ -54,6 +53,7 @@ resource "aws_lb_target_group" "alb_target_group" {
 
 # Resource to create  ALB listener for HTTPS
 resource "aws_lb_listener" "https" {
+  count             = var.enable_codeploy ? 0 : 1
   load_balancer_arn = aws_lb.alb.arn
   port              = var.aws_alb_port
   protocol          = var.aws_alb_protocol
@@ -62,7 +62,30 @@ resource "aws_lb_listener" "https" {
     for_each = var.aws_target_groups
     content {
       type             = var.aws_alb_routing_type
-      target_group_arn = var.enable_codeploy ? aws_lb_target_group.alb_target_group[default_action.value.tg_name].name != try(regex(".*-green", aws_lb_target_group.alb_target_group[default_action.value.tg_name].name), null) ? aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn : null : aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn
+      target_group_arn = aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn
+    }
+
+  }
+  tags = merge(var.default_tags, {
+    Name         = "${var.org_name}-${var.app_name}-${var.aws_alb_name}-${var.env}-alb-https-listener"
+    map-migrated = var.map_migrated_tag
+  })
+  lifecycle {
+    ignore_changes = [default_action]
+  }
+}
+
+resource "aws_lb_listener" "https-code-deploy" {
+  count             = var.enable_codeploy ? local.target_groups[0] : 0
+  load_balancer_arn = aws_lb.alb.arn
+  port              = var.aws_alb_port
+  protocol          = var.aws_alb_protocol
+  certificate_arn   = var.aws_acm_cerficate_arn
+  dynamic "default_action" {
+    for_each = var.aws_target_groups
+    content {
+      type             = var.aws_alb_routing_type
+      target_group_arn = aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn
     }
 
   }
@@ -77,7 +100,6 @@ resource "aws_lb_listener" "https" {
 
 # Resource to create ALB listener for HTTP
 resource "aws_lb_listener" "http" {
-  count             = var.enable_codeploy ? 0 : 1
   load_balancer_arn = aws_lb.alb.arn
   port              = var.aws_alb_http_port
   protocol          = var.aws_alb_http_protocol
@@ -101,7 +123,7 @@ resource "aws_lb_listener" "http" {
 # Resource to create rules for HTTPS listener
 resource "aws_lb_listener_rule" "https_listener_rule" {
   for_each     = { for tg in var.aws_target_groups : tg.tg_name => tg if tg.path_pattern != "" }
-  listener_arn = aws_lb_listener.https.arn
+  listener_arn = aws_lb_listener.https[0].arn
   priority     = each.value.priority
   action {
     type = var.aws_alb_routing_type
