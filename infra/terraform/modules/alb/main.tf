@@ -53,7 +53,7 @@ resource "aws_lb_target_group" "alb_target_group" {
 
 # Resource to create  ALB listener for HTTPS
 resource "aws_lb_listener" "https" {
-  count             = try(length(regex("green", aws_lb_target_group.alb_target_group[default_action.value.tg_name].name)) > 0, false) ? 0 : 1
+  count             = try(length(regex("green", aws_lb_target_group.alb_target_group[value.tg_name].name)) > 0, false) ? 0 : 1
   load_balancer_arn = aws_lb.alb.arn
   port              = var.aws_alb_port
   protocol          = var.aws_alb_protocol
