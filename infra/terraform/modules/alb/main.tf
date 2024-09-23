@@ -53,19 +53,13 @@ resource "aws_lb_target_group" "alb_target_group" {
 
 # Resource to create  ALB listener for HTTPS
 resource "aws_lb_listener" "https" {
+  count             = length(regex("green", aws_lb_target_group.alb_target_group[default_action.value.tg_name].name)) > 0 ? 0 : 1
   load_balancer_arn = aws_lb.alb.arn
   port              = var.aws_alb_port
   protocol          = var.aws_alb_protocol
   certificate_arn   = var.aws_acm_cerficate_arn
   dynamic "default_action" {
-    for_each = var.enable_codeploy ? [] : var.aws_target_groups
-    content {
-      type             = var.aws_alb_routing_type
-      target_group_arn = aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn
-    }
-  }
-  dynamic "default_action" {
-    for_each = var.enable_codeploy ? try(length(regex("green", aws_lb_target_group.alb_target_group[default_action.value.tg_name].name)) > 0, false) ? [] : var.aws_target_groups : []
+    for_each = var.aws_target_groups
     content {
       type             = var.aws_alb_routing_type
       target_group_arn = aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn
