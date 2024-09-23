@@ -212,3 +212,8 @@ variable "aws_alb_idle_timeout" {
   type        = number
   default     = 75
 }
+variable "enable_codeploy" {
+  description = "value"
+  type        = bool
+  default     = false
+}
