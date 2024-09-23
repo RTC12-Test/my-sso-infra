@@ -65,8 +65,8 @@ variable "aws_vpc_id" {
 }
 variable "aws_lb_target_group_port" {
   description = "The port the load Balancer uses when performing health checks on targets"
-  type        = number
-  default     = 0
+  type        = string
+  default     = "traffic-port"
 }
 variable "aws_lb_target_group_protocal" {
   description = "Protocol the load Balancer uses when performing health checks on targets. Must be one of TCP, HTTP, or HTTPS"
