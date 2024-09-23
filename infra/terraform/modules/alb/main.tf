@@ -84,6 +84,7 @@ resource "aws_lb_listener" "https-code-deploy" {
   default_action {
     type             = var.aws_alb_routing_type
     target_group_arn = aws_lb_target_group.alb_target_group[local.targets[0]].arn
+
   }
   tags = merge(var.default_tags, {
     Name         = "${var.org_name}-${var.app_name}-${var.aws_alb_name}-${var.env}-alb-https-listener"
