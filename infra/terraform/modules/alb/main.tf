@@ -21,7 +21,7 @@ resource "aws_lb" "alb" {
 
 locals {
   target_groups = { for tg in var.aws_target_groups : tg.tg_name => tg }
-  targets       = [for tg in var.var.aws_target_groups : tg.tg_name]
+  targets       = [for tg in var.aws_target_groups : tg.tg_name]
 }
 
 # Resource to create ALB Target Group 
