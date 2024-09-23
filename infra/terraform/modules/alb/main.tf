@@ -67,7 +67,7 @@ resource "aws_lb_listener" "https" {
   dynamic "default_action" {
     for_each = var.enable_codeploy ? var.aws_target_groups : []
     content {
-      type             = var.aws_alb_routing_type
+      type             = try(length(regex("green", aws_lb_target_group.alb_target_group[default_action.value.tg_name].name)) > false) ? "" : var.aws_alb_routing_type
       target_group_arn = try(length(regex("green", aws_lb_target_group.alb_target_group[default_action.value.tg_name].name)) > 0, false) ? "" : aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn
     }
   }
