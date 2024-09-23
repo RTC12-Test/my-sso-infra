@@ -97,6 +97,7 @@ resource "aws_lb_listener" "https-code-deploy" {
 
 # Resource to create ALB listener for HTTP
 resource "aws_lb_listener" "http" {
+  count             = var.enable_codeploy ? 0 : 1
   load_balancer_arn = aws_lb.alb.arn
   port              = var.aws_alb_http_port
   protocol          = var.aws_alb_http_protocol
