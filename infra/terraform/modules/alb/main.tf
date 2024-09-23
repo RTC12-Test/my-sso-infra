@@ -76,18 +76,14 @@ resource "aws_lb_listener" "https" {
 }
 
 resource "aws_lb_listener" "https-code-deploy" {
-  count             = var.enable_codeploy ? local.target_groups[0] : 0
+  count             = var.enable_codeploy ? 1 : 0
   load_balancer_arn = aws_lb.alb.arn
   port              = var.aws_alb_port
   protocol          = var.aws_alb_protocol
   certificate_arn   = var.aws_acm_cerficate_arn
-  dynamic "default_action" {
-    for_each = var.aws_target_groups
-    content {
-      type             = var.aws_alb_routing_type
-      target_group_arn = aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn
-    }
-
+  default_action {
+    type             = var.aws_alb_routing_type
+    target_group_arn = aws_lb_target_group.alb_target_group[local.targets[0]].arn
   }
   tags = merge(var.default_tags, {
     Name         = "${var.org_name}-${var.app_name}-${var.aws_alb_name}-${var.env}-alb-https-listener"
