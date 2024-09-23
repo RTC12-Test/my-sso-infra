@@ -21,7 +21,7 @@ resource "aws_lb_listener" "nlb_listener" {
   certificate_arn   = var.aws_acm_cerficate_arn
   default_action {
     type             = var.aws_nlb_routing_type
-    target_group_arn = aws_lb_target_group.target_group[0].arn
+    target_group_arn = aws_lb_target_group.target_group.arn
   }
   tags = merge(var.default_tags, {
     Name         = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-nlb-listener"
@@ -34,20 +34,19 @@ resource "aws_lb_listener" "nlb_listener" {
 
 # Resource to add target group 
 resource "aws_lb_target_group" "target_group" {
-  count                             = 1
   vpc_id                            = var.aws_vpc_id
-  name                              = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-${count.index == 0 ? "blue" : "green"}"
+  name                              = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-tg"
   port                              = var.aws_lb_target_group_port
   protocol                          = var.aws_lb_target_group_protocal
   target_type                       = var.aws_lb_target_group_type
   load_balancing_cross_zone_enabled = var.aws_load_balancing_cross_zone_enabled
   health_check {
-    path     = count.index == 0 ? var.aws_lb_target_group_health_path_blue : var.aws_lb_target_group_health_path_green
-    port     = count.index == 0 ? var.aws_lb_target_group_health_port_blue : var.aws_lb_target_group_health_port_green
+    path     = var.aws_lb_target_group_health_path
+    port     = var.aws_lb_target_group_health_port
     protocol = var.aws_lb_target_group_health_protocol
   }
   tags = merge(var.default_tags, {
-    Name         = count.index == 0 ? "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-target-group-blue" : "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-target-group-green"
+    Name         = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-tg"
     map-migrated = var.map_migrated_tag
   })
 }

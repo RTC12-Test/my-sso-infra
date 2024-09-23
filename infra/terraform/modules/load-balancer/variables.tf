@@ -78,28 +78,13 @@ variable "aws_lb_target_group_type" {
   type        = string
   default     = "ip"
 }
-variable "aws_lb_target_group_health_path_green" {
+variable "aws_lb_target_group_health_path" {
   description = "Destination for the health check request. Required for HTTP/HTTPS ALB and HTTP NLB. Only applies to HTTP/HTTPS"
   type        = string
   default     = ""
 }
-variable "aws_lb_target_group_health_path_blue" {
-  description = "Destination for the health check request. Required for HTTP/HTTPS ALB and HTTP NLB. Only applies to HTTP/HTTPS"
-  type        = string
-  default     = ""
-}
-variable "aws_lb_target_group_health_port_green" {
+variable "aws_lb_target_group_health_port" {
   description = "The port the load Balancer uses when performing health checks on targets. Valid values are either traffic-port, to use the same port as the target group, or a valid port number between 1 and 65536. Default is traffic-port"
-  type        = string
-  default     = ""
-}
-variable "aws_lb_target_group_health_port_blue" {
-  description = "The port the load Balancer uses when performing health checks on targets. Valid values are either traffic-port, to use the same port as the target group, or a valid port number between 1 and 65536. Default is traffic-port"
-  type        = string
-  default     = ""
-}
-variable "aws_active_target_group" {
-  description = "Whether to use the blue target group or green target group"
   type        = string
   default     = ""
 }
