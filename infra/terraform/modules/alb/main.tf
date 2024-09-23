@@ -21,6 +21,7 @@ resource "aws_lb" "alb" {
 
 locals {
   target_groups = { for tg in var.aws_target_groups : tg.tg_name => tg }
+  targets       = [for i in var.aws_target_groups : i.tg_name]
 }
 
 # Resource to create ALB Target Group 
@@ -61,7 +62,7 @@ resource "aws_lb_listener" "https" {
     for_each = var.aws_target_groups
     content {
       type             = var.aws_alb_routing_type
-      target_group_arn = var.enable_codeploy ? aws_lb_target_group.alb_target_group[local.target_groups[0]].arn : aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn
+      target_group_arn = var.enable_codeploy ? aws_lb_target_group.alb_target_group[local.targets[0]].arn : aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn
     }
 
   }
