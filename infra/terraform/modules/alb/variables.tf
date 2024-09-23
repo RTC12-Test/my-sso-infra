@@ -217,3 +217,8 @@ variable "enable_codeploy" {
   type        = bool
   default     = false
 }
+variable "enable_stickness" {
+  description = "value"
+  type        = bool
+  default     = false
+}

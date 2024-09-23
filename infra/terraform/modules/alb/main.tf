@@ -39,7 +39,7 @@ resource "aws_lb_target_group" "alb_target_group" {
     unhealthy_threshold = var.aws_lb_target_group_unhealthy_threshold
   }
   dynamic "stickiness" {
-    for_each = false ? [1] : []
+    for_each = var.enable_stickness ? [1] : []
     content {
       enabled = var.aws_lb_tg_stickness_enabled
       type    = var.aws_lb_tg_stickeness_type
