@@ -19,7 +19,7 @@ variable "default_tags" {
   default     = {}
 }
 variable "service_name" {
-  description = "The service assign for the security should create"
+  description = "The service assign for the Security Group should create"
   type        = string
   default     = ""
 }

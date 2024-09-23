@@ -14,7 +14,7 @@ variable "env" {
   default     = ""
 }
 variable "aws_lb_type" {
-  description = "The type of load balancer to create. Possible values are application, gateway, or network. The default value is application"
+  description = "The type of load Balancer to create. Possible values are application, gateway, or network. The default value is application"
   type        = string
   default     = ""
 }
@@ -24,7 +24,7 @@ variable "aws_nlb_vpc_subnet" {
   default     = [""]
 }
 variable "aws_nlb_sg_id" {
-  description = "A list of security group IDs to assign to the LB. Only valid for Load Balancers of type application or network"
+  description = "A list of Security Group IDs to assign to the LB. Only valid for Load Balancers of type application or network"
   type        = list(string)
   default     = [""]
 }
@@ -39,7 +39,7 @@ variable "default_tags" {
   default     = {}
 }
 variable "aws_nlb_port" {
-  description = "Port on which the load balancer is listening. Not valid for Gateway Load Balancers"
+  description = "Port on which the load Balancer is listening. Not valid for Gateway Load Balancers"
   type        = number
   default     = 0
 }
@@ -54,7 +54,7 @@ variable "aws_nlb_routing_type" {
   default     = "forward"
 }
 variable "aws_enable_deletion_protection" {
-  description = "If true, deletion of the load balancer will be disabled via the AWS API"
+  description = "If true, deletion of the load Balancer will be disabled via the AWS API"
   type        = bool
   default     = false
 }
@@ -64,12 +64,12 @@ variable "aws_vpc_id" {
   default     = ""
 }
 variable "aws_lb_target_group_port" {
-  description = "The port the load balancer uses when performing health checks on targets"
+  description = "The port the load Balancer uses when performing health checks on targets"
   type        = number
   default     = 0
 }
 variable "aws_lb_target_group_protocal" {
-  description = "Protocol the load balancer uses when performing health checks on targets. Must be one of TCP, HTTP, or HTTPS"
+  description = "Protocol the load Balancer uses when performing health checks on targets. Must be one of TCP, HTTP, or HTTPS"
   type        = string
   default     = "TLS"
 }
@@ -78,13 +78,28 @@ variable "aws_lb_target_group_type" {
   type        = string
   default     = "ip"
 }
-variable "aws_lb_target_group_health_path" {
+variable "aws_lb_target_group_health_path_green" {
   description = "Destination for the health check request. Required for HTTP/HTTPS ALB and HTTP NLB. Only applies to HTTP/HTTPS"
   type        = string
   default     = ""
 }
-variable "aws_lb_target_group_health_port" {
-  description = "The port the load balancer uses when performing health checks on targets. Valid values are either traffic-port, to use the same port as the target group, or a valid port number between 1 and 65536. Default is traffic-port"
+variable "aws_lb_target_group_health_path_blue" {
+  description = "Destination for the health check request. Required for HTTP/HTTPS ALB and HTTP NLB. Only applies to HTTP/HTTPS"
+  type        = string
+  default     = ""
+}
+variable "aws_lb_target_group_health_port_green" {
+  description = "The port the load Balancer uses when performing health checks on targets. Valid values are either traffic-port, to use the same port as the target group, or a valid port number between 1 and 65536. Default is traffic-port"
+  type        = string
+  default     = ""
+}
+variable "aws_lb_target_group_health_port_blue" {
+  description = "The port the load Balancer uses when performing health checks on targets. Valid values are either traffic-port, to use the same port as the target group, or a valid port number between 1 and 65536. Default is traffic-port"
+  type        = string
+  default     = ""
+}
+variable "aws_active_target_group" {
+  description = "Whether to use the blue target group or green target group"
   type        = string
   default     = ""
 }
@@ -99,7 +114,7 @@ variable "service_name" {
   default     = ""
 }
 variable "aws_enable_cross_zone_load_balancing" {
-  description = "If true, cross-zone load balancing of the load balancer will be enabled"
+  description = "If true, cross-zone load balancing of the load Balancer will be enabled"
   type        = bool
   default     = true
 }
@@ -114,7 +129,7 @@ variable "aws_acm_cerficate_arn" {
   default     = ""
 }
 variable "aws_lb_target_group_health_protocol" {
-  description = "Protocol the load balancer uses when performing health checks on targets. Must be one of TCP, HTTP, or HTTPS. The TCP protocol is not supported for health checks if the protocol of the target group is HTTP or HTTPS. Default is HTTP. Cannot be specified when the target_type is lambda"
+  description = "Protocol the load Balancer uses when performing health checks on targets. Must be one of TCP, HTTP, or HTTPS. The TCP protocol is not supported for health checks if the protocol of the target group is HTTP or HTTPS. Default is HTTP. Cannot be specified when the target_type is lambda"
   type        = string
   default     = "HTTPS"
 }

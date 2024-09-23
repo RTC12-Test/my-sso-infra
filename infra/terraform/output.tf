@@ -1,4 +1,4 @@
 # Output for cluster name 
-# output "aws_ecs_cluster_name" {
-#   value = module.ecs-cluster.aws_ecs_cluster_name
-# }
+output "aws_ecs_cluser" {
+  value = module.alb[0].alb_target_arn["test"]
+}

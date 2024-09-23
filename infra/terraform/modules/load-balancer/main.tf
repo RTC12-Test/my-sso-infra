@@ -34,7 +34,7 @@ resource "aws_lb_listener" "nlb_listener" {
 
 # Resource to add target group 
 resource "aws_lb_target_group" "target_group" {
-  count                             = 2
+  count                             = 1
   vpc_id                            = var.aws_vpc_id
   name                              = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-${count.index == 0 ? "blue" : "green"}"
   port                              = var.aws_lb_target_group_port
