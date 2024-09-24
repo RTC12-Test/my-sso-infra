@@ -67,10 +67,10 @@ resource "aws_lb_listener" "https" {
 
   }
   dynamic "default_action" {
-    for_each = var.enable_codeploy ? local.targets[0] : []
+    for_each = var.enable_codeploy ? [1] : []
     content {
       type             = var.aws_alb_routing_type
-      target_group_arn = aws_lb_target_group.alb_target_group[default_action.value.tg_name].arn
+      target_group_arn = aws_lb_target_group.alb_target_group[local.targets[0]].arn
     }
   }
   tags = merge(var.default_tags, {
