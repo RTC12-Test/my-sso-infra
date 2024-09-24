@@ -82,24 +82,24 @@ resource "aws_lb_listener" "https" {
   }
 }
 
-resource "aws_lb_listener" "https-code-deploy" {
-  count             = var.enable_codeploy ? 1 : 0
-  load_balancer_arn = aws_lb.alb.arn
-  port              = var.aws_alb_port
-  protocol          = var.aws_alb_protocol
-  certificate_arn   = var.aws_acm_cerficate_arn
-  default_action {
-    type             = var.aws_alb_routing_type
-    target_group_arn = aws_lb_target_group.alb_target_group[local.targets[0]].arn
-  }
-  tags = merge(var.default_tags, {
-    Name         = "${var.org_name}-${var.app_name}-${var.aws_alb_name}-${var.env}-alb-https-listener"
-    map-migrated = var.map_migrated_tag
-  })
-  lifecycle {
-    ignore_changes = [default_action]
-  }
-}
+# resource "aws_lb_listener" "https-code-deploy" {
+#   count             = var.enable_codeploy ? 1 : 0
+#   load_balancer_arn = aws_lb.alb.arn
+#   port              = var.aws_alb_port
+#   protocol          = var.aws_alb_protocol
+#   certificate_arn   = var.aws_acm_cerficate_arn
+#   default_action {
+#     type             = var.aws_alb_routing_type
+#     target_group_arn = aws_lb_target_group.alb_target_group[local.targets[0]].arn
+#   }
+#   tags = merge(var.default_tags, {
+#     Name         = "${var.org_name}-${var.app_name}-${var.aws_alb_name}-${var.env}-alb-https-listener"
+#     map-migrated = var.map_migrated_tag
+#   })
+#   lifecycle {
+#     ignore_changes = [default_action]
+#   }
+# }
 
 # Resource to create ALB listener for HTTP
 resource "aws_lb_listener" "http" {
