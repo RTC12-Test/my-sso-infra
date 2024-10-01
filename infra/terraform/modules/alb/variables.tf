@@ -171,3 +171,6 @@ variable "aws_lb_https_listener_rule_path_value" {
 variable "aws_lb_https_listener_rule_host_header_value" {
 
 }
+variable "aws_hp" {
+
+}
