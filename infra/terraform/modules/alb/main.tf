@@ -72,7 +72,7 @@
 # Resource to create rules for HTTPS listener
 resource "aws_lb_listener_rule" "https_listener_rule" {
   listener_arn = var.aws_hp
-  priority     = var.aws_lb_https_listener_rule_priority
+  priority     = "1"
   action {
     type = var.aws_alb_routing_type
     forward {
