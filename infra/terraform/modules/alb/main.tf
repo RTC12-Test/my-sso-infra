@@ -83,7 +83,7 @@ resource "aws_lb_listener_rule" "https_listener_rule" {
   }
   condition {
     path_pattern {
-      values = var.aws_lb_https_listener_rule_path_value
+      values = ["/"]
     }
   }
   tags = merge(var.default_tags, {
