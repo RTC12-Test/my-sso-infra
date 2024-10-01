@@ -87,7 +87,7 @@ resource "aws_lb_listener_rule" "https_listener_rule" {
     }
   }
   tags = merge(var.default_tags, {
-    Name         = "${var.org_name}-${var.app_name}-${var.aws_alb_name}-${each.value.tg_name}-${var.env}-alb-listener-rule"
+    Name         = "${var.org_name}-${var.app_name}-${var.aws_alb_name}-${var.env}-alb-listener-rule"
     map-migrated = var.map_migrated_tag
   })
 }
