@@ -85,9 +85,6 @@ resource "aws_lb_listener_rule" "https_listener_rule" {
     path_pattern {
       values = var.aws_lb_https_listener_rule_path_value
     }
-    host_header {
-      values = var.aws_lb_https_listener_rule_host_header_value
-    }
   }
   tags = merge(var.default_tags, {
     Name         = "${var.org_name}-${var.app_name}-${var.aws_alb_name}-${each.value.tg_name}-${var.env}-alb-listener-rule"
