@@ -161,16 +161,16 @@ variable "enable_codeploy" {
 # variable "aws_lb_https_listener_rule_priority" {
 #
 # }
-# variable "aws_lb_https_listener_tg_arn" {
-#
-#
-# }
+variable "aws_lb_https_listener_tg_arn" {
+
+
+}
 # variable "aws_lb_https_listener_rule_path_value" {
 #
 # }
 # variable "aws_lb_https_listener_rule_host_header_value" {
 #
 # }
-# variable "aws_hp" {
-#
-# }
+variable "aws_hp" {
+
+}
