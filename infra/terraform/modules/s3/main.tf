@@ -8,12 +8,12 @@ resource "aws_s3_bucket" "s3_bucket" {
 }
 
 resource "aws_s3_object" "s3_object" {
-  count  = true ? 1 : 0
+  count  = false ? 1 : 0
   bucket = aws_s3_bucket.s3_bucket.id
   key    = "python.zip"
 }
 resource "aws_s3_bucket_versioning" "s3_versioning" {
-  count  = true ? 1 : 0
+  count  = false ? 1 : 0
   bucket = aws_s3_bucket.s3_bucket.id
   versioning_configuration {
     status = "Enabled"
@@ -22,5 +22,5 @@ resource "aws_s3_bucket_versioning" "s3_versioning" {
 resource "aws_s3_bucket_policy" "s3_bucket_policy" {
   count  = var.create_aws_s3_bucket_policy ? 1 : 0
   bucket = aws_s3_bucket.s3_bucket.id
-  policy = var.aws_s3_bucket_policy
+  policy = templatefile(var.aws_s3_bucket_policy_file, var.aws_s3_bucket_policy_vars)
 }

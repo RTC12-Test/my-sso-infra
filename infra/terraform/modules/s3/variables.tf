@@ -38,8 +38,14 @@ variable "aws_account_id" {
   type        = string
   default     = ""
 }
-variable "aws_s3_bucket_policy" {
+variable "aws_s3_bucket_policy_file" {
   description = "The JSON-encoded policy to apply to the S3 bucket"
   type        = string
   default     = ""
 }
+variable "aws_s3_bucket_policy_vars" {
+  description = "The JSON-encoded policy to apply to the S3 bucket"
+  type        = map(any)
+  default     = {}
+}
+

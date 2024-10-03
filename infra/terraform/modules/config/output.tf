@@ -13,3 +13,9 @@ output "secrets" {
 output "taskdefintionfile" {
   value = "${path.module}/task-definition-json.tpl"
 }
+output "s3policyfile" {
+  value = "${path.module}/policy.json"
+}
+output "s3policy_nlbfile" {
+  value = "${path.module}/policy-nlb.json"
+}

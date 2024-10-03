@@ -23,22 +23,22 @@ variable "map_migrated_tag" {
   type        = string
   default     = ""
 }
-variable "aws_alb_port" {
+variable "aws_lb_port" {
   description = "Port on which the load balancer is listening. Not valid for Gateway Load Balancers"
   type        = number
   default     = 0
 }
-variable "aws_alb_http_port" {
+variable "aws_lb_http_port" {
   description = "Port on which the load balancer is listening. Not valid for Gateway Load Balancers"
   type        = string
   default     = 80
 }
-variable "aws_alb_protocol" {
+variable "aws_lb_protocol" {
   description = "Protocol for connections from clients to the load balancer. For Application Load Balancers, valid values are HTTP and HTTPS, with a default of HTTP. For Network Load Balancers"
   type        = string
   default     = "HTTPS"
 }
-variable "aws_alb_http_protocol" {
+variable "aws_lb_http_protocol" {
   description = "Protocol for connections from clients to the load balancer. For Application Load Balancers, valid values are HTTP and HTTPS, with a default of HTTP. For Network Load Balancers"
   type        = string
   default     = "HTTP"
@@ -48,37 +48,37 @@ variable "aws_acm_cerficate_arn" {
   type        = string
   default     = ""
 }
-variable "aws_alb_routing_type" {
+variable "aws_lb_routing_type" {
   description = "Type of routing action"
   type        = string
   default     = "forward"
 }
-variable "aws_alb_load_balancing_cross_zone_enabled" {
+variable "aws_lb_load_balancing_cross_zone_enabled" {
   description = "Indicates whether cross zone load balancing is enabled"
   type        = bool
   default     = true
 }
-variable "aws_alb_internal" {
+variable "aws_lb_internal" {
   description = "If true, the LB will be internal. Defaults to false"
   type        = bool
   default     = true
 }
-variable "aws_alb_enable_deletion_protection" {
+variable "aws_lb_enable_deletion_protection" {
   description = "If true, deletion of the load balancer will be disabled via the AWS API"
   type        = bool
   default     = false
 }
-variable "aws_alb_sg_id" {
+variable "aws_lb_sg_id" {
   description = "A list of security group IDs to assign to the LB. Only valid for Load Balancers of type application or network"
   type        = list(string)
   default     = [""]
 }
-variable "aws_alb_vpc_subnet" {
+variable "aws_lb_vpc_subnet" {
   description = "A list of subnet IDs to attach to the LB. For Load Balancers of type network subnets can only be added, deleting a subnet for load balancers of type network will force a recreation of the resource"
   type        = list(string)
   default     = [""]
 }
-variable "aws_alb_http_routing_type" {
+variable "aws_lb_http_routing_type" {
   description = "The type of routing action. Valid values are forward, redirect, fixed-response, authenticate-cognito and authenticate-oidc"
   type        = string
   default     = "redirect"
@@ -108,7 +108,7 @@ variable "default_tags" {
   type        = map(string)
   default     = {}
 }
-variable "aws_alb_name" {
+variable "aws_lb_name" {
   description = "Name of the ALB"
   type        = string
   default     = ""
@@ -123,32 +123,32 @@ variable "aws_lb_listener_rule_stickness_enabled" {
   type        = bool
   default     = false
 }
-variable "aws_alb_service_name" {
+variable "aws_lb_service_name" {
   description = "Service name"
   type        = string
   default     = ""
 }
-variable "aws_alb_creation_by_tf" {
+variable "aws_lb_creation_by_tf" {
   description = "The value is true if Terraform will create the resource, and false if the resource will be created by another method"
   type        = bool
   default     = false
 }
-variable "aws_alb_access_logs_s3_bucket_name" {
+variable "aws_lb_access_logs_s3_bucket_name" {
   description = "S3 bucket name to store the logs in"
   type        = string
   default     = ""
 }
-variable "aws_alb_access_logs_prefix" {
+variable "aws_lb_access_logs_prefix" {
   description = "S3 bucket prefix. Logs are stored in the root if not configured"
   type        = string
-  default     = ""
+  default     = "Load-Balancer-logs"
 }
-variable "aws_alb_access_logs_enabled" {
+variable "aws_lb_access_logs_enabled" {
   description = "Boolean to enable / disable access_logs. Defaults to false, even when bucket is specified"
   type        = bool
   default     = true
 }
-variable "aws_alb_idle_timeout" {
+variable "aws_lb_idle_timeout" {
   description = "The time in seconds that the connection is allowed to be idle"
   type        = number
   default     = 75
@@ -158,19 +158,8 @@ variable "enable_codeploy" {
   type        = bool
   default     = false
 }
-# variable "aws_lb_https_listener_rule_priority" {
-#
-# }
-variable "aws_lb_https_listener_tg_arn" {
-
-
-}
-# variable "aws_lb_https_listener_rule_path_value" {
-#
-# }
-# variable "aws_lb_https_listener_rule_host_header_value" {
-#
-# }
-variable "aws_hp" {
-
+variable "aws_lb_tg_arn" {
+  description = "ARN of the Target Group to which to route traffic. Specify only if type is forward and you want to route to a single target group. To route to one or more target groups, use a forward block instead. Can be specified with forward but ARNs must match"
+  type        = string
+  default     = ""
 }

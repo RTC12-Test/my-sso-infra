@@ -47,64 +47,198 @@ module "security_group" {
   map_migrated_tag     = lookup(local.configs, "map_migrated_tag")
 }
 
-module "alb" {
-  for_each              = { for i, alb in lookup(local.configs, "albs") : i => alb }
-  source                = "./modules/alb"
-  app_name              = lookup(local.configs, "app_name")
-  org_name              = lookup(local.configs, "org_name")
-  env                   = terraform.workspace
-  default_tags          = local.default_tags
-  aws_vpc_id            = lookup(local.configs, "aws_vpc_id")
-  aws_alb_vpc_subnet    = lookup(local.configs, "aws_subnet")
-  aws_alb_port          = lookup(local.configs, "aws_alb_port")
-  map_migrated_tag      = lookup(local.configs, "map_migrated_tag")
-  aws_alb_internal      = lookup(local.configs, "aws_alb_internal")
-  aws_alb_sg_id         = [module.security_group.aws_sg_id["app-alb"]]
-  aws_acm_cerficate_arn = lookup(local.configs, "aws_acm_cerficate_arn")
-  aws_alb_name          = each.value.aws_alb_name
-  aws_target_groups     = each.value.aws_target_groups
-  # aws_alb_access_logs_s3_bucket_name = module.s3.s3_bucket_name
-  # aws_alb_access_logs_prefix         = each.value.aws_alb_access_logs_prefix
+module "s3-sso-front-alb" {
+  source                      = "./modules/s3"
+  org_name                    = lookup(local.configs, "org_name")
+  app_name                    = lookup(local.configs, "app_name")
+  env                         = terraform.workspace
+  service_name                = "s3-sso-${terraform.workspace}-front-alb"
+  default_tags                = local.default_tags
+  map_migrated_tag            = lookup(local.configs, "map_migrated_tag")
+  create_aws_s3_bucket_policy = lookup(local.configs, "create_aws_s3_bucket_policy")
+  aws_s3_bucket_policy_file   = module.config.s3policyfile
+  aws_s3_bucket_policy_vars = {
+    "aws_elb_account_id" : lookup(local.configs, "aws_elb_account_id")
+    "aws_s3_bucket_name" : "${lookup(local.configs, "org_name")}-${lookup(local.configs, "app_name")}-${terraform.workspace}-s3-sso-${terraform.workspace}-front-alb-bucket"
+  }
 }
-# module "secrets-manager" {
-#   source           = "./modules/secrets-manager"
-#   org_name         = lookup(local.configs, "org_name")
-#   app_name         = lookup(local.configs, "app_name")
-#   env              = terraform.workspace
-#   default_tags     = local.default_tags
-#   map_migrated_tag = lookup(local.configs, "map_migrated_tag")
-#   aws_sercret_string = {
-#     "acs1_ldap_pass"     = module.delinea.secret_values["acs1_ldap_password"].value
-#     "emt_db_pwd"         = module.delinea.secret_values["emeta_database_cloud_password"].value
-#     "bridge_account_id"  = module.delinea.secret_values["bridge_account_client-id"].value
-#     "ssooauth_client_id" = module.delinea.secret_values["ssooauth_client-id"].value
+module "s3-sso-back-alb" {
+  source                      = "./modules/s3"
+  org_name                    = lookup(local.configs, "org_name")
+  app_name                    = lookup(local.configs, "app_name")
+  env                         = terraform.workspace
+  service_name                = "s3-sso-${terraform.workspace}-back-alb"
+  default_tags                = local.default_tags
+  map_migrated_tag            = lookup(local.configs, "map_migrated_tag")
+  create_aws_s3_bucket_policy = lookup(local.configs, "create_aws_s3_bucket_policy")
+  aws_s3_bucket_policy_file   = module.config.s3policyfile
+  aws_s3_bucket_policy_vars = {
+    "aws_elb_account_id" : lookup(local.configs, "aws_elb_account_id")
+    "aws_s3_bucket_name" : "${lookup(local.configs, "org_name")}-${lookup(local.configs, "app_name")}-${terraform.workspace}-s3-sso-${terraform.workspace}-back-alb-bucket"
+  }
+}
+
+# module "s3-client-front-alb" {
+#   source                      = "./modules/s3"
+#   org_name                    = lookup(local.configs, "org_name")
+#   app_name                    = lookup(local.configs, "app_name")
+#   env                         = terraform.workspace
+#   service_name                = "s3-client-${terraform.workspace}-front-alb"
+#   default_tags                = local.default_tags
+#   map_migrated_tag            = lookup(local.configs, "map_migrated_tag")
+#   create_aws_s3_bucket_policy = lookup(local.configs, "create_aws_s3_bucket_policy")
+#   aws_s3_bucket_policy_file   = module.config.s3policyfile
+#   aws_s3_bucket_policy_vars = {
+#     "aws_elb_account_id" : lookup(local.configs, "aws_elb_account_id")
+#     "aws_s3_bucket_name" : "${lookup(local.configs, "org_name")}-${lookup(local.configs, "app_name")}-${terraform.workspace}-s3-client-${terraform.workspace}-front-alb-bucket"
 #   }
 # }
-
-# Calling EFS module to create EFS
-# module "efs" {
-#   source                          = "./modules/efs"
-#   env                             = terraform.workspace
-#   default_tags                    = local.default_tags
-#   org_name                        = lookup(local.configs, "org_name")
-#   app_name                        = lookup(local.configs, "app_name")
-#   aws_vpc_efs_subnets             = lookup(local.configs, "aws_subnet")
-#   map_migrated_tag                = lookup(local.configs, "map_migrated_tag")
-#   aws_efs_mount_security_group_id = ["sg-00ad135f2594702bc"]
-#   aws_access_point_enable         = true
+# module "s3-client-alb-back" {
+#   source                      = "./modules/s3"
+#   org_name                    = lookup(local.configs, "org_name")
+#   app_name                    = lookup(local.configs, "app_name")
+#   env                         = terraform.workspace
+#   service_name                = "s3-client-${terraform.workspace}-back-alb"
+#   default_tags                = local.default_tags
+#   map_migrated_tag            = lookup(local.configs, "map_migrated_tag")
+#   create_aws_s3_bucket_policy = lookup(local.configs, "create_aws_s3_bucket_policy")
+#   aws_s3_bucket_policy_file   = module.config.s3policyfile
+#   aws_s3_bucket_policy_vars = {
+#     "aws_elb_account_id" : lookup(local.configs, "aws_elb_account_id")
+#     "aws_s3_bucket_name" : "${lookup(local.configs, "org_name")}-${lookup(local.configs, "app_name")}-${terraform.workspace}-s3-client-${terraform.workspace}-back-alb-bucket"
+#   }
 # }
-#
-# module "lambda" {
-#   source              = "./modules/lambda_function"
-#   env                 = terraform.workspace
-#   default_tags        = local.default_tags
-#   org_name            = lookup(local.configs, "org_name")
-#   app_name            = lookup(local.configs, "app_name")
-#   map_migrated_tag    = lookup(local.configs, "map_migrated_tag")
-#   aws_lb_subnets      = lookup(local.configs, "aws_subnet")
-#   aws_lambda_filename = lookup(local.configs, "aws_lambda_filename")
-#   archive_source_dir  = lookup(local.configs, "archive_source_dir")
-#   archive_output_path = lookup(local.configs, "archive_output_path")
-#   aws_lambda_type     = lookup(local.configs, "aws_lambda_type")
-# }
+module "s3-sso-nlb" {
+  source                      = "./modules/s3"
+  org_name                    = lookup(local.configs, "org_name")
+  app_name                    = lookup(local.configs, "app_name")
+  env                         = terraform.workspace
+  service_name                = "s3-sso-${terraform.workspace}-nlb"
+  default_tags                = local.default_tags
+  map_migrated_tag            = lookup(local.configs, "map_migrated_tag")
+  create_aws_s3_bucket_policy = lookup(local.configs, "create_aws_s3_bucket_policy")
+  aws_s3_bucket_policy_file   = module.config.s3policy_nlbfile
+  aws_s3_bucket_policy_vars = {
+    "aws_s3_bucket_name" : "${lookup(local.configs, "org_name")}-${lookup(local.configs, "app_name")}-${terraform.workspace}-s3-sso-${terraform.workspace}-nlb-bucket"
+  }
+}
 
+module "sso-front-alb" {
+  source                            = "./modules/alb"
+  app_name                          = lookup(local.configs, "app_name")
+  org_name                          = lookup(local.configs, "org_name")
+  env                               = terraform.workspace
+  default_tags                      = local.default_tags
+  aws_lb_name                       = "sso-front-alb"
+  aws_lb_sg_id                      = [module.security_group.aws_sg_id["sso-alb-front"]]
+  aws_lb_vpc_subnet                 = lookup(local.configs, "aws_subnet")
+  aws_lb_port                       = lookup(local.configs, "aws_alb_port")
+  map_migrated_tag                  = lookup(local.configs, "map_migrated_tag")
+  aws_lb_internal                   = false
+  aws_acm_cerficate_arn             = lookup(local.configs, "aws_acm_cerficate_arn")
+  aws_lb_type                       = "application"
+  aws_lb_access_logs_s3_bucket_name = module.s3-sso-front-alb.s3_bucket_name
+  aws_lb_protocol                   = "HTTPS"
+  aws_lb_http_port                  = "80"
+  aws_lb_tg_arn                     = module.tg-front-alb.tg_arn
+}
+module "sso-back-alb" {
+  source                            = "./modules/alb"
+  app_name                          = lookup(local.configs, "app_name")
+  org_name                          = lookup(local.configs, "org_name")
+  env                               = terraform.workspace
+  aws_lb_name                       = "sso-back-alb"
+  default_tags                      = local.default_tags
+  aws_lb_sg_id                      = [module.security_group.aws_sg_id["sso-alb-back"]]
+  aws_lb_vpc_subnet                 = lookup(local.configs, "aws_subnet")
+  aws_lb_port                       = lookup(local.configs, "aws_alb_port")
+  map_migrated_tag                  = lookup(local.configs, "map_migrated_tag")
+  aws_lb_internal                   = lookup(local.configs, "aws_alb_internal")
+  aws_acm_cerficate_arn             = lookup(local.configs, "aws_acm_cerficate_arn")
+  aws_lb_type                       = "application"
+  aws_lb_protocol                   = "HTTPS"
+  enable_codeploy                   = true
+  aws_lb_access_logs_s3_bucket_name = module.s3-sso-back-alb.s3_bucket_name
+  aws_lb_tg_arn                     = module.tg-back-alb.tg_arn
+}
+module "sso-nlb" {
+  source                            = "./modules/alb"
+  app_name                          = lookup(local.configs, "app_name")
+  aws_lb_name                       = "sso-nlb"
+  org_name                          = lookup(local.configs, "org_name")
+  env                               = terraform.workspace
+  default_tags                      = local.default_tags
+  aws_lb_sg_id                      = [module.security_group.aws_sg_id["sso-nlb"]]
+  aws_lb_vpc_subnet                 = lookup(local.configs, "aws_subnet")
+  aws_lb_port                       = lookup(local.configs, "aws_alb_port")
+  map_migrated_tag                  = lookup(local.configs, "map_migrated_tag")
+  aws_lb_internal                   = lookup(local.configs, "aws_alb_internal")
+  aws_lb_type                       = "network"
+  enable_codeploy                   = true
+  aws_lb_access_logs_s3_bucket_name = module.s3-sso-nlb.s3_bucket_name
+  aws_lb_protocol                   = "TCP"
+  aws_lb_tg_arn                     = module.tg-nlb.tg_arn
+
+}
+module "tg-front-alb" {
+  source                 = "./modules/lb_target_group"
+  org_name               = lookup(local.configs, "org_name")
+  app_name               = lookup(local.configs, "app_name")
+  env                    = terraform.workspace
+  default_tags           = local.default_tags
+  aws_vpc_id             = lookup(local.configs, "aws_vpc_id")
+  aws_lb_tg_protocal     = "HTTPS"
+  aws_lb_tg_port         = 443
+  aws_lb_tg_health_path  = "/"
+  aws_lb_tg_service_name = "tg-front-alb"
+}
+module "tg-nlb" {
+  source                 = "./modules/lb_target_group"
+  org_name               = lookup(local.configs, "org_name")
+  app_name               = lookup(local.configs, "app_name")
+  env                    = terraform.workspace
+  default_tags           = local.default_tags
+  aws_vpc_id             = lookup(local.configs, "aws_vpc_id")
+  aws_lb_tg_protocal     = "TCP"
+  aws_lb_tg_port         = 443
+  aws_lb_tg_health_path  = "/"
+  aws_lb_tg_service_name = "tg-nlb"
+  aws_lb_tg_type         = "alb"
+}
+module "tg-back-alb" {
+  source                 = "./modules/lb_target_group"
+  org_name               = lookup(local.configs, "org_name")
+  app_name               = lookup(local.configs, "app_name")
+  env                    = terraform.workspace
+  default_tags           = local.default_tags
+  aws_vpc_id             = lookup(local.configs, "aws_vpc_id")
+  aws_lb_tg_protocal     = "HTTPS"
+  aws_lb_tg_port         = 8443
+  aws_lb_tg_health_path  = "/"
+  aws_lb_tg_service_name = "tg-back-alb"
+}
+# aws_lb_tg_arn = 
+# module "s3-client-nlb" {
+#   source                      = "./modules/s3"
+#   org_name                    = lookup(local.configs, "org_name")
+#   app_name                    = lookup(local.configs, "app_name")
+#   env                         = terraform.workspace
+#   service_name                = "s3-sso-${terraform.workspace}-nlb"
+#   default_tags                = local.default_tags
+#   map_migrated_tag            = lookup(local.configs, "map_migrated_tag")
+#   create_aws_s3_bucket_policy = lookup(local.configs, "create_aws_s3_bucket_policy")
+#   aws_s3_bucket_policy_file   = module.config.s3policyfile
+#   aws_s3_bucket_policy_vars = {
+#     "aws_elb_account_id" : lookup(local.configs, "aws_elb_account_id")
+#     "aws_s3_bucket_name" : "${lookup(local.configs, "org_name")}-${lookup(local.configs, "app_name")}-${terraform.workspace}-s3-sso-${terraform.workspace}-nlb-bucket"
+#   }
+# }
+# module "alb" {
+#   for_each     = { for i, alb in lookup(local.configs, "albs") : i => alb }
+#   source       = "./modules/alb"
+#   app_name     = lookup(local.configs, "app_name")
+#   org_name     = lookup(local.configs, "org_name")
+#   env          = terraform.workspace
+#   default_tags = local.default_tags
+#   # aws_vpc_id            = lookup(local.configs, "aws_vpc_id")
+# }
