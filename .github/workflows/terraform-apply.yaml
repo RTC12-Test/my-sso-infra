@@ -110,5 +110,5 @@ jobs:
       # Applying terraform
       - name: Terraform apply
         run: |
-            hello=$(make ENV=${{ inputs.env }} TF_CMD_ARGS='-auto-approve terraform_${{ github.sha }}.plan' terraform/apply)
+            hello="$(make ENV=${{ inputs.env }} TF_CMD_ARGS='-auto-approve terraform_${{ github.sha }}.plan' terraform/apply)"
             echo "$hello"
