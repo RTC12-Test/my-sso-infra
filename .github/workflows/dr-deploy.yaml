@@ -23,13 +23,13 @@ jobs:
   #   runs-on: ubuntu-latest
   #   steps:
   #     - name: asd
-  #       run: echo "{GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" 
+  #       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" 
   
   # This calls terraform-apply.yaml to do TF apply on dr environment
   terraform-apply-dr:
     if: ${{ inputs.task == 'create' }}
     name: Terraform apply dr
-    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}} 
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@${{github.ref_name}} 
     with:
       env: dev
       role-to-assume: "arn:aws:iam::677276076781:role/odic"
