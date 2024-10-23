@@ -19,7 +19,7 @@ on:
       branch:
         description: 'Select branch or tag'
         required: true
-        default: github.ref
+        default: ${{ github.ref }}
         type: string # This allows the selection of branches or tags
 
 jobs:
