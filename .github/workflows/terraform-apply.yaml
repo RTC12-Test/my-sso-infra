@@ -1,0 +1,112 @@
+name: Terraform apply
+# Runs the workflow on the below events:
+# 1. On push event to develop branch
+# 2. On push event to main branch
+
+on:
+  workflow_call:
+    # Required inputs
+    inputs:
+      env:
+        description: "stage | dev | prod"
+        required: true
+        type: string
+      role-to-assume:
+        description: "AWS Role arn"
+        type: string
+        required: true
+      role-session-name:
+        description: "AWS Role session name"
+        type: string
+        required: true
+      aws-region-name:
+        description: "AWS region name"
+        type: string
+        required: true
+      aws-kms-key-arn:
+        description: "AWS kms key arn to decrypt the secrets"
+        type: string
+        required: false
+        default: arn:aws:kms:us-east-1:637423277544:key/76826c40-ca8d-44a1-9b1e-5a5bd3c75e8a
+      docker-image-tag:
+        description: "Docker image tag"
+        type: string
+        required: false
+      service-name:
+        description: "Service name"
+        type: string
+        required: false
+      sops-enable :
+        description: "Enable the sops for sops workflow"
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  # This job runs Terraform Plan
+  plan:
+    name: Plan (${{ inputs.env }})
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-plan.yaml@develop
+    with:
+      env: ${{ inputs.env }}
+      role-to-assume: ${{ inputs.role-to-assume }}
+      role-session-name: ${{ inputs.role-session-name }}
+      aws-region-name: ${{ inputs.aws-region-name }}
+      service-name: ${{ inputs.service-name }}
+      docker-image-tag: ${{inputs.docker-image-tag }}
+      aws-kms-key-arn: ${{ inputs.aws-kms-key-arn }}
+      sops-enable: ${{ inputs.sops-enable }}
+      
+  apply:
+    # This job runs Terraform Apply.
+    name: Apply (${{ inputs.env }})
+    environment: ${{ inputs.env }}
+    runs-on: ubuntu-latest
+    needs: [plan]
+    steps:
+      # Checkout the project
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
+      # Logging into aws
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ inputs.aws-region-name }}
+          role-to-assume: ${{ inputs.role-to-assume }}
+          role-session-name: ${{ inputs.role-session-name }}
+
+      # Composite runner
+      - name: Use sops workflow file
+        if: ${{ inputs.sops-enable == true }}
+        uses: RTC12-Test/my-sso-infra/.github/actions/sops@develop
+        with:
+         aws-kms-key-arn : ${{ inputs.aws-kms-key-arn }}
+         env: ${{ inputs.env }}
+
+      # Replace image tag in json file
+      - name: Replacing image tag in json file
+        if: ${{ github.repository != 'RTC12-Test/my-sso-infra' }}
+        run: |
+          sed -i 's/$docker_image_tag"/${{ inputs.docker-image-tag }}"/' service-${{ inputs.service-name}}.json
+
+      # Install terraform cli
+      - name: Terraform install
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.8.2"
+
+      # Intialiazation of terraform project
+      - name: Terraform init
+        run: make ENV=${{ inputs.env }} terraform/init
+
+      # Download the terraform plan
+      - name: Restore terraform plan
+        uses: actions/download-artifact@v2
+        with:
+          name: terraform_${{ github.sha }}.plan
+          path: infra/terraform
+
+      # Applying terraform
+      - name: Terraform apply
+        run: echo "$make ENV=${{ inputs.env }} TF_CMD_ARGS='-auto-approve terraform_${{ github.sha }}.plan' terraform/apply"

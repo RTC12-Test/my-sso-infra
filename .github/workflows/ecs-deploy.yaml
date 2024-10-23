@@ -1,0 +1,104 @@
+name: Deploy ecs
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        description: "stage | dev | prod"
+        type: string
+        required: true
+      service-name:
+        description: "AWS service name"
+        type: string
+        required: true
+      role-to-assume:
+        description: "AWS Role arn"
+        type: string
+        required: true
+      role-session-name:
+        description: "AWS Role session name"
+        type: string
+        required: true
+      task_name:
+        description: "AWS task name"
+        type: string
+        required: true
+      cluster-name:
+        description: "AWS cluster name"
+        type: string
+        required: true
+      container-name:
+        description: "ECS container name"
+        type: string
+        required: true
+      aws-region-name:
+        description: "AWS region name"
+        type: string
+        required: true
+      codedeploy-deployment-group:
+        description: "Codedeploy deployment group"
+        type: string
+        required: true
+      codedeploy-application:
+        description: "Codedeploy application"
+        type: string
+        required: true
+      docker-image-url:
+        description: "Docker image url"
+        type: string
+        required: true
+      update-docker-image-tag:
+        description: "Flag to update the task definition"
+        type: boolean
+        required: false
+        default: true
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read
+
+jobs:
+  deploy:
+    environment: ${{ inputs.env }}
+    runs-on: ubuntu-latest
+    steps:
+      # Checking out the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Logging to aws
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          role-to-assume: ${{ inputs.role-to-assume }}
+          role-session-name: ${{ inputs.role-session-name }}
+          aws-region: ${{ inputs.aws-region-name }}
+
+      # Get latest version of task definition
+      - name: Download task definition
+        id: tasks
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ inputs.task_name }} --query taskDefinition --output json > task-definition.json
+          echo task-definition=task-definition.json >> $GITHUB_OUTPUT
+
+      # Update task definition
+      - name: Update task definition
+        if: ${{ inputs.update-docker-image-tag == true }}
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ inputs.container-name }}
+          image: ${{ inputs.docker-image-url }}
+
+      # Deploying the new version in ECS Cluster
+      - name: Deploy ${{ inputs.service-name }}
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ inputs.update-docker-image-tag == true && steps.task-def.outputs.task-definition ||  steps.tasks.outputs.task-definition }}
+          service: ${{ inputs.service-name }}
+          cluster: ${{ inputs.cluster-name }}
+          codedeploy-appspec: ./infra/terraform/config_env/${{ inputs.env }}/appspec.json
+          codedeploy-application: ${{ inputs.codedeploy-application }}
+          codedeploy-deployment-group: ${{ inputs.codedeploy-deployment-group }}
+          wait-for-service-stability: true
