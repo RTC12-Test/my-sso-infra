@@ -19,15 +19,11 @@ on:
       branch:
         description: 'Select branch or tag'
         required: true
-        default: 'main'
-        type: ref # This allows the selection of branches or tags
+        default: github.ref
+        type: string # This allows the selection of branches or tags
 
 jobs:
-  trim-space: 
-  runs-on: ubuntu-latest
-  steps:
-      - name: remove 
-        run: $
+  
   # This calls terraform-apply.yaml to do TF apply on dr environment
   terraform-apply-dr:
     if: ${{ inputs.task == 'create' }}
