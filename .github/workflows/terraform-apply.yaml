@@ -102,11 +102,13 @@ jobs:
 
       # Download the terraform plan
       - name: Restore terraform plan
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v
         with:
           name: terraform_${{ github.sha }}.plan
           path: infra/terraform
 
       # Applying terraform
       - name: Terraform apply
-        run: echo "$make ENV=${{ inputs.env }} TF_CMD_ARGS='-auto-approve terraform_${{ github.sha }}.plan' terraform/apply"
+        run: |
+            hello=$(make ENV=${{ inputs.env }} TF_CMD_ARGS='-auto-approve terraform_${{ github.sha }}.plan' terraform/apply)
+            echo "$hello"
