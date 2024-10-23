@@ -29,7 +29,7 @@ jobs:
   terraform-apply-dr:
     if: ${{ inputs.task == 'create' }}
     name: Terraform apply dr
-    uses: "RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@{GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" "
+    uses: "RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@{GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" 
     with:
       env: dev
       role-to-assume: "arn:aws:iam::677276076781:role/odic"
