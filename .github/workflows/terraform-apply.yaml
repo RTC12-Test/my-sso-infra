@@ -102,7 +102,7 @@ jobs:
 
       # Download the terraform plan
       - name: Restore terraform plan
-        uses: actions/download-artifact@v
+        uses: actions/download-artifact@v3
         with:
           name: terraform_${{ github.sha }}.plan
           path: infra/terraform
