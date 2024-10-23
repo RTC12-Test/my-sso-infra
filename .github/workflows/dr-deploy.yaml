@@ -23,26 +23,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: asd
-        run: echo "${{ github.ref }}"
+        run: echo "{GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" 
   
-  # This calls terraform-apply.yaml to do TF apply on dr environment
-  terraform-apply-dr:
-    if: ${{ inputs.task == 'create' }}
-    name: Terraform apply dr
-    uses: "RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main"
-    with:
-      env: dev
-      role-to-assume: "arn:aws:iam::677276076781:role/odic"
-      role-session-name: "acsdrrolesession"
-      aws-region-name: "us-east-2"
+  # # This calls terraform-apply.yaml to do TF apply on dr environment
+  # terraform-apply-dr:
+  #   if: ${{ inputs.task == 'create' }}
+  #   name: Terraform apply dr
+  #   uses: "RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main"
+  #   with:
+  #     env: dev
+  #     role-to-assume: "arn:aws:iam::677276076781:role/odic"
+  #     role-session-name: "acsdrrolesession"
+  #     aws-region-name: "us-east-2"
 
-  # This calls terraform-destroy.yaml to do TF destroy on dr environment
-  terraform-destroy-dr:
-    if: ${{ inputs.task == 'destroy' }}
-    name: Terraform apply dr
-    uses: "RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main"
-    with:
-      env: dev
-      role-to-assume: "arn:aws:iam::677276076781:role/odic"
-      role-session-name: "acsdrrolesession"
-      aws-region-name: "us-east-2"
+  # # This calls terraform-destroy.yaml to do TF destroy on dr environment
+  # terraform-destroy-dr:
+  #   if: ${{ inputs.task == 'destroy' }}
+  #   name: Terraform apply dr
+  #   uses: "RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main"
+  #   with:
+  #     env: dev
+  #     role-to-assume: "arn:aws:iam::677276076781:role/odic"
+  #     role-session-name: "acsdrrolesession"
+  #     aws-region-name: "us-east-2"
