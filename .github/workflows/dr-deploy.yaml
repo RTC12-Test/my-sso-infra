@@ -9,9 +9,6 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: "Branch name"
-        required: true
       task:
         description: "Target environment"
         required: true
@@ -21,6 +18,11 @@ on:
           - destroy
 
 jobs:
+  trim-space: 
+  runs-on: ubuntu-latest
+  steps:
+      - name: remove 
+        run: $
   # This calls terraform-apply.yaml to do TF apply on dr environment
   terraform-apply-dr:
     if: ${{ inputs.task == 'create' }}
