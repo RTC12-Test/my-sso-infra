@@ -26,7 +26,7 @@ jobs:
   terraform-apply-prod:
     if: ${{ inputs.env == dev }}
     name: "Trigger terraform apply prod"
-    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main  
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@${{ inputs.branch }}
     with:
       env: dev
       role-to-assume: "arn:aws:iam::677276076781:role/odic"
