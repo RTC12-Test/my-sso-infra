@@ -1,5 +1,5 @@
 # S3 configuration for terraform backend
-bucket = "ara-sso-dev-tf-infra-backend"
+bucket = "acs-rtctek-test-1"
 key    = "terraform.tfstate"
 region = "us-east-1"
 
