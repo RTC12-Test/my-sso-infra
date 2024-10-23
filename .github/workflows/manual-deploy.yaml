@@ -26,7 +26,7 @@ jobs:
   terraform-apply-prod:
     if: ${{ inputs.env ==  prod }}
     name: "Trigger terraform apply prod"
-    uses: AmericanChemicalSociety/acs-sso-infra/.github/workflows/terraform-apply.yaml@v3.0.0
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main  
     with:
       env: dev
       role-to-assume: "arn:aws:iam::201431874166:role/acs-sso-dev-oidcsrole"

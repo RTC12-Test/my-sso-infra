@@ -25,7 +25,7 @@ jobs:
   terraform-apply-dr:
     if: ${{ inputs.task == create }}
     name: Terraform apply dr
-    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@develop
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main
     with:
       env: dev
       role-to-assume: "arn:aws:iam::637423277544:role/test_oidc"
@@ -36,7 +36,7 @@ jobs:
   terraform-destroy-dr:
     if: ${{ inputs.task == destroy }}
     name: Terraform apply dr
-    uses: AmericanChemicalSociety/acs-sso-infra/.github/workflows/terraform-destroy.yaml@v3.0.0
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main
     with:
       env: dev
       role-to-assume: "arn:aws:iam::637423277544:role/test_oidc"
