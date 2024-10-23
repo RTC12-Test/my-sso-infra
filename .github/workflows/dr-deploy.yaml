@@ -19,8 +19,13 @@ on:
 
 jobs:
   aas:
+    outputs:
+        as: ${{ steps.as.outputs.branch }}
+
     name: asd
+    
     runs-on: ubuntu-latest
+    id: as
     steps:
       - name: asd
         run: echo "branch=echo${{github.ref_name}}" >> GITHUB_OUTPUT
@@ -28,9 +33,10 @@ jobs:
   
   # This calls terraform-apply.yaml to do TF apply on dr environment
   terraform-apply-dr:
+    needs: [aas]
     if: ${{ inputs.task == 'create' }}
     name: Terraform apply dr
-    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@"${{github.ref_name}}" 
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@${{needs.as.outputs.branch}} 
     with:
       env: dev
       role-to-assume: "arn:aws:iam::677276076781:role/odic"
