@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       task:
-        description: "Target environment"
+        description: "Action"
         required: true
         type: choice
         options:
