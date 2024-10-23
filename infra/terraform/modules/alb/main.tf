@@ -1,5 +1,6 @@
 # Resource to create LB
 resource "aws_lb" "lb" {
+  for_each                         = j
   name                             = "${var.org_name}-${var.app_name}-${var.aws_lb_name}-${var.env}-lb"
   load_balancer_type               = var.aws_lb_type
   internal                         = var.aws_lb_internal

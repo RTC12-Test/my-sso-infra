@@ -48,4 +48,7 @@ variable "aws_s3_bucket_policy_vars" {
   type        = map(any)
   default     = {}
 }
-
+variable "aws_s3_buckets" {
+  type    = map(any)
+  default = {}
+}
