@@ -39,7 +39,7 @@ jobs:
   terraform-destroy-dr:
     if: ${{ inputs.task == 'destroy' }}
     name: Terraform apply dr
-    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@${{ inputs.branch }}
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main
     with:
       env: dev
       role-to-assume: "arn:aws:iam::677276076781:role/odic"
