@@ -24,11 +24,11 @@ on:
 jobs:
   # This calls terraform-apply.yaml to do TF apply on prod environment
   terraform-apply-prod:
-    if: ${{ inputs.env ==  prod }}
+    if: ${{ inputs.env == dev }}
     name: "Trigger terraform apply prod"
     uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main  
     with:
       env: dev
-      role-to-assume: "arn:aws:iam::201431874166:role/acs-sso-dev-oidcsrole"
+      role-to-assume: "arn:aws:iam::677276076781:role/odic"
       role-session-name: "acsprodrolesession"
       aws-region-name: "us-east-1"

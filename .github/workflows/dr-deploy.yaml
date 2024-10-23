@@ -28,7 +28,7 @@ jobs:
     uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main
     with:
       env: dev
-      role-to-assume: "arn:aws:iam::637423277544:role/test_oidc"
+      role-to-assume: "arn:aws:iam::677276076781:role/odic"
       role-session-name: "acsdrrolesession"
       aws-region-name: "us-east-2"
 
@@ -39,6 +39,6 @@ jobs:
     uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main
     with:
       env: dev
-      role-to-assume: "arn:aws:iam::637423277544:role/test_oidc"
+      role-to-assume: "arn:aws:iam::677276076781:role/odic"
       role-session-name: "acsdrrolesession"
       aws-region-name: "us-east-2"
