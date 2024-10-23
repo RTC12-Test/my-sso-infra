@@ -1,0 +1,34 @@
+name: Manual Deploy
+# Runs the workflow on the below events:
+# 1. On push event to develop branch
+# 2. On push event to main branch
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch name"
+        required: true
+      env:
+        description: "Target environment"
+        required: true
+        type: choice
+        options:
+          - dev
+          - stage
+          - prod
+
+jobs:
+  # This calls terraform-apply.yaml to do TF apply on prod environment
+  terraform-apply-prod:
+    if: ${{ inputs.env ==  prod }}
+    name: "Trigger terraform apply prod"
+    uses: AmericanChemicalSociety/acs-sso-infra/.github/workflows/terraform-apply.yaml@v3.0.0
+    with:
+      env: dev
+      role-to-assume: "arn:aws:iam::201431874166:role/acs-sso-dev-oidcsrole"
+      role-session-name: "acsprodrolesession"
+      aws-region-name: "us-east-1"
