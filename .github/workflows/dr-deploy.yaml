@@ -64,3 +64,4 @@ jobs:
       role-session-name: "acsdrrolesession"
       aws-region-name: "us-east-2"
       targets: "-destroy ${{ needs.targets.outputs.targets }}"
+      task: ${{ inputs.task }}
