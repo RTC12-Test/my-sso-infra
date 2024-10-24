@@ -44,7 +44,7 @@ jobs:
     needs: [targets]
     if: ${{ inputs.task == 'create' }}
     name: Terraform apply dr
-    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@${{needs.as.outputs.branch}} 
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main
     with:
       env: dev
       role-to-assume: "arn:aws:iam::677276076781:role/odic"
