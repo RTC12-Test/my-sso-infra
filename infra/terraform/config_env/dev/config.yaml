@@ -2,7 +2,7 @@
 region: "us-east-1"
 org_name: "rtcek"
 app_name: "sso"
-aws_vpc_id: "vpc-080a56a3aed67fe15"
+aws_vpc_id: "vpc-060f02b7488c8743e"
 aws_subnet: ["subnet-0cb38996848fd445f", "subnet-03b603c553367164c", "subnet-0ccdcb1b28b0b0505", "subnet-07d777b42f84d0549", "subnet-0e26e9bee5ad56648"]
 
 # lambda
