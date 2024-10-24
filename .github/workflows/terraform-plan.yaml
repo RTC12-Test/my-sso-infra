@@ -94,7 +94,11 @@ jobs:
 
       # Terraform plan is generated for modules
       - name: Terraform plan
-        run: make ENV=${{ inputs.env}} TF_CMD_ARGS='-lock=false -out=terraform_${{ github.sha }}.plan ${{ inputs.targets }}' terraform/plan
+        run: make ENV=${{ inputs.env}} TF_CMD_ARGS='-lock=false ${{ inputs.targets }} -out=terraform_${{ github.sha }}.plan' terraform/plan
+
+      # Terraform plan is generated for modules
+      - name: Terraform plan
+        run: make ENV=${{ inputs.env}} TF_CMD_ARGS='-lock=false ${{ inputs.targets }} -out=terraform_${{ github.sha }}.plan -destroy ${{ inputs.targets }}' terraform/plan
 
       # Uploading terrform plan
       - name: Save terraform plan

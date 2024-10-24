@@ -34,7 +34,7 @@ jobs:
            reformed_targets=()
            IFS="," read -ra targets <<<$inputed_targets
            for target in ${targets[@]}; do
-             reformed_tasks+=("--target" $target)
+             reformed_tasks+=("-target"=$target)
            done
            echo "targets=${reformed_tasks[@]}" >> $GITHUB_OUTPUT
         
@@ -57,10 +57,10 @@ jobs:
     if: ${{ inputs.task == 'destroy' }}
     needs: [targets]
     name: Terraform destroy dr
-    uses: "RTC12-Test/my-sso-infra/.github/workflows/terraform-destroy.yaml@main"
+    uses: "RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main"
     with:
       env: dev
       role-to-assume: "arn:aws:iam::677276076781:role/odic"
       role-session-name: "acsdrrolesession"
       aws-region-name: "us-east-2"
-      targets: ${{ needs.targets.outputs.targets }}
+      targets: "-destroy ${{ needs.targets.outputs.targets }}"
