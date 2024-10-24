@@ -9,6 +9,9 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
+      targets:
+        description: "target"
+        required: true
       tasks:
         description: "Action"
         required: true
@@ -21,11 +24,11 @@ jobs:
   aas:
     outputs:
        tasks: ${{ steps.tasks.outputs.targets }}
-    name: tasks
+    name: targets
     runs-on: ubuntu-latest
     steps:
-      - name: tasks
-        id: tasks
+      - name: targets
+        id: targets
         run: |
            tasks=${{ inputs.tasks }}
            reformed_tasks=()
@@ -59,4 +62,4 @@ jobs:
       role-to-assume: "arn:aws:iam::677276076781:role/odic"
       role-session-name: "acsdrrolesession"
       aws-region-name: "us-east-2"
-      tasks: ${{ needs.tasks.outputs.tasks }}
+      targets: ${{ needs.tasks.outputs.targets }}
