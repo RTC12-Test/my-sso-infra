@@ -11,7 +11,7 @@ on:
     inputs:
       targets:
         description: "target"
-        required: true
+        required: false
       task:
         description: "Action"
         required: false
