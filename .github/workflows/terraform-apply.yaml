@@ -51,7 +51,7 @@ jobs:
   # This job runs Terraform Plan
   plan:
     name: Plan (${{ inputs.env }})
-    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-plan.yaml@develop
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-plan.yaml@main
     with:
       env: ${{ inputs.env }}
       role-to-assume: ${{ inputs.role-to-assume }}
@@ -61,7 +61,7 @@ jobs:
       docker-image-tag: ${{inputs.docker-image-tag }}
       aws-kms-key-arn: ${{ inputs.aws-kms-key-arn }}
       sops-enable: ${{ inputs.sops-enable }}
-      targets: ${{ inputs.targets  }}
+      targets: ${{ inputs.targets }}
       
   apply:
     # This job runs Terraform Apply.
