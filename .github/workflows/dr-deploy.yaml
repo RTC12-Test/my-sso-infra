@@ -9,7 +9,7 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      task:
+      tasks:
         description: "Action"
         required: true
         type: choice
@@ -20,36 +20,43 @@ on:
 jobs:
   aas:
     outputs:
-        as: ${{ steps.as.outputs.branch }}
-
-    name: asd
-    
+       tasks: ${{ steps.tasks.outputs.targets }}
+    name: tasks
     runs-on: ubuntu-latest
-    id: as
     steps:
-      - name: asd
-        run: echo "branch=echo${{github.ref_name}}" >> GITHUB_OUTPUT
+      - name: tasks
+        id: tasks
+        run: |
+           tasks=${{ inputs.tasks }}
+           reformed_tasks=()
+           IFS="," read -ra arr <<<$asd
+           for task in ${tasks[@]}; do
+             reformed_tasks+=("-target" $task)
+           done
+           echo "targets=${reformed_tasks[@]}" >> $GITHUB_OUTPUT
         
   
   # This calls terraform-apply.yaml to do TF apply on dr environment
-  terraform-apply-dr:
-    needs: [aas]
-    if: ${{ inputs.task == 'create' }}
-    name: Terraform apply dr
-    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@${{needs.as.outputs.branch}} 
-    with:
-      env: dev
-      role-to-assume: "arn:aws:iam::677276076781:role/odic"
-      role-session-name: "acsdrrolesession"
-      aws-region-name: "us-east-2"
-
-  # # This calls terraform-destroy.yaml to do TF destroy on dr environment
-  # terraform-destroy-dr:
-  #   if: ${{ inputs.task == 'destroy' }}
+  # terraform-apply-dr:
+  #   needs: [aas]
+  #   if: ${{ inputs.task == 'create' }}
   #   name: Terraform apply dr
-  #   uses: "RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main"
+  #   uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@${{needs.as.outputs.branch}} 
   #   with:
   #     env: dev
   #     role-to-assume: "arn:aws:iam::677276076781:role/odic"
   #     role-session-name: "acsdrrolesession"
   #     aws-region-name: "us-east-2"
+
+  # # This calls terraform-destroy.yaml to do TF destroy on dr environment
+  terraform-destroy-dr:
+    needs: [tasks]
+    if: ${{ inputs.task == 'destroy' }}
+    name: Terraform destroy dr
+    uses: "RTC12-Test/my-sso-infra/.github/workflows/terraform-destroy.yaml@main"
+    with:
+      env: dev
+      role-to-assume: "arn:aws:iam::677276076781:role/odic"
+      role-session-name: "acsdrrolesession"
+      aws-region-name: "us-east-2"
+      tasks: ${{ needs.tasks.outputs.tasks }}
