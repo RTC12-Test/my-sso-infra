@@ -26,7 +26,12 @@ on:
       aws-region-name:
         description: "AWS region name"
         type: string
-        required: true
+        required: true 
+      task:
+        description: "Action"
+        required: false
+        type: string
+        default: ""
       
 jobs:
   # This job runs Terraform Plan
