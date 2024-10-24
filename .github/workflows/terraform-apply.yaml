@@ -7,6 +7,11 @@ on:
   workflow_call:
     # Required inputs
     inputs:
+      targets:
+        description: "targets"
+        required: false
+        type: string
+        default: ""
       env:
         description: "stage | dev | prod"
         required: true

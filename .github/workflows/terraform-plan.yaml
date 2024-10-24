@@ -11,8 +11,9 @@ on:
     inputs:
       targets:
         description: "targets"
-        required: true
+        required: false
         type: string
+        default: ""
       env:
         description: "Env name"
         type: string
