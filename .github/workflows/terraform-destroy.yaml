@@ -93,4 +93,4 @@ jobs:
 
       # Destroying Terraform resources
       - name: Terraform destroy resources
-        run: make ENV=${{ inputs.env }} TF_CMD_ARGS='-auto-approve -${{ inputs.targets }}' terraform/destroy
+        run: make ENV=${{ inputs.env }} TF_CMD_ARGS='-auto-approve ${{ inputs.targets }}' terraform/destroy
