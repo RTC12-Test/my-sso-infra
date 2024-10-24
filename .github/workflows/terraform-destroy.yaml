@@ -58,7 +58,7 @@ jobs:
 
       # Terraform plan for terraform destroy
       - name: Terraform plan for terraform  destroy
-        run: make ENV=${{ inputs.env }} TF_CMD_ARGS='-destroy -${{ inputs.targets }}' terraform/plan
+        run: make ENV=${{ inputs.env }} TF_CMD_ARGS='-destroy ${{ inputs.targets }}' terraform/plan
 
   # destroy:
   #   # This job runs Terraform Destroy
