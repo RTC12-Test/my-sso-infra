@@ -14,7 +14,7 @@ on:
         required: true
       task:
         description: "Action"
-        required: true
+        required: false
         type: choice
         options:
           - create
@@ -38,6 +38,17 @@ jobs:
            done
            echo "targets=${reformed_tasks[@]}" >> $GITHUB_OUTPUT
         
+  terraform-appl-dr:
+    needs: [targets]
+    if: ${{ inputs.task == 'create' }}
+    name: Terraform apply dr
+    uses: RTC12-Test/my-sso-infra/.github/workflows/terraform-apply.yaml@main
+    with:
+      env: dev
+      role-to-assume: "arn:aws:iam::677276076781:role/odic"
+      role-session-name: "acsdrrolesession"
+      aws-region-name: "us-east-2"
+      # targets: ${{ needs.targets.outputs.targets }}
   
   # This calls terraform-apply.yaml to do TF apply on dr environment
   # terraform-apply-dr:

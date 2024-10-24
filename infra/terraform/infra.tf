@@ -29,7 +29,7 @@ module "ecs-cluster" {
 }
 
 
-# Module for Security Group for ALB
+#Module for Security Group for ALB
 module "security_group" {
   source               = "./modules/security-group"
   aws_sg_configuration = lookup(local.configs, "aws_sg_configuration")
