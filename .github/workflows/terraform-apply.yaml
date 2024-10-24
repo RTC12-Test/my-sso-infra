@@ -7,10 +7,6 @@ on:
   workflow_call:
     # Required inputs
     inputs:
-      targets:
-        description: "targets"
-        required: true
-        type: string
       env:
         description: "stage | dev | prod"
         required: true
@@ -60,6 +56,7 @@ jobs:
       docker-image-tag: ${{inputs.docker-image-tag }}
       aws-kms-key-arn: ${{ inputs.aws-kms-key-arn }}
       sops-enable: ${{ inputs.sops-enable }}
+      targets: ${{ inputs.targets  }}
       
   apply:
     # This job runs Terraform Apply.
@@ -114,5 +111,5 @@ jobs:
       # Applying terraform
       - name: Terraform apply
         run: |
-            make ENV=${{ inputs.env }} TF_CMD_ARGS='-auto-approve terraform_${{ github.sha }}.plan ${{ inputs.targets }}' terraform/apply
+            make ENV=${{ inputs.env }} TF_CMD_ARGS='-auto-approve terraform_${{ github.sha }}.plan' terraform/apply
 

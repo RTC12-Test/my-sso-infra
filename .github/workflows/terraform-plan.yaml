@@ -9,10 +9,15 @@ on:
   workflow_call:
     # Required inputs
     inputs:
+      targets:
+        description: "targets"
+        required: true
+        type: string
       env:
         description: "Env name"
         type: string
-        required: true
+        required: false
+        default: ""
       role-to-assume:
         description: "AWS Role arn"
         type: string
@@ -88,7 +93,7 @@ jobs:
 
       # Terraform plan is generated for modules
       - name: Terraform plan
-        run: make ENV=${{ inputs.env}} TF_CMD_ARGS='-lock=false -out=terraform_${{ github.sha }}.plan' terraform/plan
+        run: make ENV=${{ inputs.env}} TF_CMD_ARGS='-lock=false -out=terraform_${{ github.sha }}.plan ${{ inputs.targets }}' terraform/plan
 
       # Uploading terrform plan
       - name: Save terraform plan

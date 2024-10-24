@@ -34,7 +34,7 @@ jobs:
            reformed_targets=()
            IFS="," read -ra targets <<<$inputed_targets
            for target in ${targets[@]}; do
-             reformed_tasks+=("-target" $target)
+             reformed_tasks+=("--target" $target)
            done
            echo "targets=${reformed_tasks[@]}" >> $GITHUB_OUTPUT
         
