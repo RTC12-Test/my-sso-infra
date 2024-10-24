@@ -41,6 +41,17 @@ module "security_group" {
   aws_vpc_id           = lookup(local.configs, "aws_vpc_id")
   map_migrated_tag     = lookup(local.configs, "map_migrated_tag")
 }
+module "ecr" {
+
+  source           = "./modules/ecr"
+  app_name         = lookup(local.configs, "app_name")
+  org_name         = lookup(local.configs, "org_name")
+  env              = terraform.workspace
+  service_name     = lookup(local.configs, "service_name")
+  default_tags     = local.default_tags
+  map_migrated_tag = lookup(local.configs, "map_migrated_tag")
+}
+
 #
 # # Module for aws_efs
 # module "efs" {
