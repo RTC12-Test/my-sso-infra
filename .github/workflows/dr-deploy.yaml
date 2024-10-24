@@ -53,7 +53,7 @@ jobs:
 
   # # This calls terraform-destroy.yaml to do TF destroy on dr environment
   terraform-destroy-dr:
-    needs: [tasks]
+    needs: [targets]
     if: ${{ inputs.task == 'destroy' }}
     name: Terraform destroy dr
     uses: "RTC12-Test/my-sso-infra/.github/workflows/terraform-destroy.yaml@main"
