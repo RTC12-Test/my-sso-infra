@@ -30,11 +30,11 @@ jobs:
       - name: targets
         id: targets
         run: |
-           tasks=${{ inputs.tasks }}
-           reformed_tasks=()
-           IFS="," read -ra arr <<<$asd
-           for task in ${tasks[@]}; do
-             reformed_tasks+=("-target" $task)
+           inputed_targets=${{ inputs.targets }}
+           reformed_targets=()
+           IFS="," read -ra targets <<<$inputed_targets
+           for target in ${targets[@]}; do
+             reformed_tasks+=("-target" $target)
            done
            echo "targets=${reformed_tasks[@]}" >> $GITHUB_OUTPUT
         
