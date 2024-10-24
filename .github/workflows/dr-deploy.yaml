@@ -12,7 +12,7 @@ on:
       targets:
         description: "target"
         required: true
-      tasks:
+      task:
         description: "Action"
         required: true
         type: choice
