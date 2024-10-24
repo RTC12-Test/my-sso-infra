@@ -7,6 +7,10 @@ on:
   workflow_call:
     # Required inputs
     inputs:
+      targets:
+        description: "targets"
+        required: true
+        type: string
       env:
         description: "stage | dev | prod"
         required: true
@@ -110,5 +114,5 @@ jobs:
       # Applying terraform
       - name: Terraform apply
         run: |
-            hello="$(make ENV=${{ inputs.env }} TF_CMD_ARGS='-auto-approve terraform_${{ github.sha }}.plan' terraform/apply)"
+            hello="$(make ENV=${{ inputs.env }} TF_CMD_ARGS='-auto-approve terraform_${{ github.sha }}.plan ${{ inputs.targets }}' terraform/apply)"
             echo "$hello"
