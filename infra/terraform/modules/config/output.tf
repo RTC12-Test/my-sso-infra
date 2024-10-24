@@ -13,9 +13,9 @@ output "secrets" {
 output "taskdefintionfile" {
   value = "${path.module}/task-definition-json.tpl"
 }
-output "sg_comman" {
-  value = var.sg_comman
-}
-output "efs_id" {
-  value = var.efs_id
-}
+# output "sg_comman" {
+#   value = var.sg_comman
+# }
+# output "efs_id" {
+#   value = var.efs_id
+# }

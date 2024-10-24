@@ -14,8 +14,8 @@ module "config" {
   division                 = lookup(local.configs, "division")
   department               = lookup(local.configs, "department")
   technicalContact         = lookup(local.configs, "technicalContact")
-  sg_comman                = module.security_group.aws_sg_id["sg-comman"]
-  efs_id                   = module.efs.aws_efs_file_id
+  # sg_comman                = module.security_group.aws_sg_id["sg-comman"]
+  # efs_id                   = module.efs.aws_efs_file_id
 }
 
 # Module for calling ecs-cluster module
