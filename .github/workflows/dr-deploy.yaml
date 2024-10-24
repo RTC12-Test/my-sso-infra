@@ -62,4 +62,4 @@ jobs:
       role-to-assume: "arn:aws:iam::677276076781:role/odic"
       role-session-name: "acsdrrolesession"
       aws-region-name: "us-east-2"
-      targets: ${{ needs.tasks.outputs.targets }}
+      targets: ${{ needs.targets.outputs.targets }}
