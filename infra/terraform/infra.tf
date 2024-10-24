@@ -30,17 +30,17 @@ module "ecs-cluster" {
 
 
 #Module for Security Group for ALB
-module "security_group" {
-  source               = "./modules/security-group"
-  aws_sg_configuration = lookup(local.configs, "aws_sg_configuration")
-  app_name             = lookup(local.configs, "app_name")
-  org_name             = lookup(local.configs, "org_name")
-  env                  = terraform.workspace
-  service_name         = lookup(local.configs, "service_name")
-  default_tags         = local.default_tags
-  aws_vpc_id           = lookup(local.configs, "aws_vpc_id")
-  map_migrated_tag     = lookup(local.configs, "map_migrated_tag")
-}
+# module "security_group" {
+#   source               = "./modules/security-group"
+#   aws_sg_configuration = lookup(local.configs, "aws_sg_configuration")
+#   app_name             = lookup(local.configs, "app_name")
+#   org_name             = lookup(local.configs, "org_name")
+#   env                  = terraform.workspace
+#   service_name         = lookup(local.configs, "service_name")
+#   default_tags         = local.default_tags
+#   aws_vpc_id           = lookup(local.configs, "aws_vpc_id")
+#   map_migrated_tag     = lookup(local.configs, "map_migrated_tag")
+# }
 module "ecr" {
 
   source           = "./modules/ecr"
