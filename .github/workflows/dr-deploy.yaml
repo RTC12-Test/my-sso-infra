@@ -21,9 +21,9 @@ on:
           - destroy
 
 jobs:
-  aas:
+  targets:
     outputs:
-       tasks: ${{ steps.tasks.outputs.targets }}
+       targets: ${{ steps.targets.outputs.targets }}
     name: targets
     runs-on: ubuntu-latest
     steps:
