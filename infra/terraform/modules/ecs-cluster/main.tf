@@ -9,4 +9,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
     Name         = "${var.org_name}-${var.app_name}-${var.env}-ecs-cluster"
     map-migrated = var.map_migrated_tag
   })
+  lifecycle {
+    prevent_destroy = false
+  }
 }

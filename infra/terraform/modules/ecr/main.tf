@@ -15,6 +15,10 @@ resource "aws_ecr_repository" "ecr" {
     map-migrated = var.map_migrated_tag
   })
 }
+resource "aws_ecr_lifecycle_policy" "test" {
+  repository = aws_ecr_repository.ecr.name
+  policy     = file("${path.root}/policy.json")
+}
 
 # Resource to create ECR Scanning
 resource "aws_ecr_registry_scanning_configuration" "configuration" {

@@ -32,6 +32,7 @@ resource "aws_ecs_service" "ecs_service" {
       deployment_controller,
       platform_version
     ]
+    prevent_destroy = false
   }
 }
 
@@ -43,6 +44,7 @@ resource "aws_codedeploy_app" "codedeploy_app" {
     "name"       = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-codedeploy-app"
     map-migrated = var.map_migrated_tag
   })
+
 }
 
 # Resource to create codedeploy group
@@ -87,6 +89,7 @@ resource "aws_codedeploy_deployment_group" "codedeploy_group" {
     "name"       = "${var.org_name}-${var.app_name}-${var.service_name}-${var.env}-codedeploy-group"
     map-migrated = var.map_migrated_tag
   })
+
 }
 
 # Resource to create Autoscaling target for ECS service
