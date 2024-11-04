@@ -8,6 +8,7 @@ resource "aws_ecs_task_definition" "task_definition" {
   execution_role_arn       = var.aws_task_execution_role
   task_role_arn            = var.aws_task_execution_role
   container_definitions    = templatefile(var.task_definition_file, var.task_definition_variables)
+  track_latest             = true
   volume {
     name = var.aws_taskdefinition_volume_name
     efs_volume_configuration {

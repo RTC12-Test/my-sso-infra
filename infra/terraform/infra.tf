@@ -28,6 +28,26 @@ module "ecs-cluster" {
   map_migrated_tag = lookup(local.configs, "map_migrated_tag")
 }
 
+module "load-balancers" {
+  for_each          = { for i in lookup(local.configs, "load-balancers") : i.aws_lb_name => i }
+  source            = "./modules/load-balancers"
+  app_name          = lookup(local.configs, "app_name")
+  aws_lb_name       = each.value.aws_lb_name
+  org_name          = lookup(local.configs, "org_name")
+  env               = terraform.workspace
+  default_tags      = local.default_tags
+  aws_lb_sg_id      = [module.security_group.aws_sg_id[each.value.alb_sg]]
+  aws_lb_vpc_subnet = lookup(local.configs, "aws_subnet")
+  map_migrated_tag  = lookup(local.configs, "map_migrated_tag")
+  aws_lb_type       = try(each.value.aws_lb_type, "application")
+  aws_lb_protocol   = try(each.value.aws_lb_protocol, "HTTPS")
+  # aws_lb_tg_arn     = module.default-target-groups[each.value.tg_name].tg_arn
+  # enable_access_logs                = try(each.value.enable_alb_access_logs, false)
+  # aws_lb_access_logs_s3_bucket_name = try(module.s3-buckets[each.value.s3_bucket_name].s3_bucket_name, "")
+  create_http_listener = try(each.value.create_http_listener, false)
+  # aws_acm_cerficate_arn             = try(each.value.certificate, lookup(local.configs, "aws_acm_cerficate_arn"))
+  # depends_on                        = [module.s3-buckets]
+}
 
 #Module for Security Group for ALB
 # module "security_group" {
