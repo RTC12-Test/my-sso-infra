@@ -47,20 +47,20 @@ module "config" {
 #   map_migrated_tag     = lookup(local.configs, "map_migrated_tag")
 # }
 
-module "s3-sso-front-alb" {
-  source                      = "./modules/s3"
-  org_name                    = lookup(local.configs, "org_name")
-  app_name                    = lookup(local.configs, "app_name")
-  env                         = terraform.workspace
-  service_name                = "s3-sso-${terraform.workspace}-front-alb"
-  default_tags                = local.default_tags
-  map_migrated_tag            = lookup(local.configs, "map_migrated_tag")
-  create_aws_s3_bucket_policy = lookup(local.configs, "create_aws_s3_bucket_policy")
-  aws_s3_bucket_policy_file   = "../../policy.json"
-  aws_s3_bucket_policy_vars = {
-    "aws_elb_account_id" : lookup(local.configs, "aws_elb_account_id")
-  }
-}
+# module "s3-sso-front-alb" {
+#   source                      = "./modules/s3"
+#   org_name                    = lookup(local.configs, "org_name")
+#   app_name                    = lookup(local.configs, "app_name")
+#   env                         = terraform.workspace
+#   service_name                = "s3-sso-${terraform.workspace}-front-alb"
+#   default_tags                = local.default_tags
+#   map_migrated_tag            = lookup(local.configs, "map_migrated_tag")
+#   create_aws_s3_bucket_policy = lookup(local.configs, "create_aws_s3_bucket_policy")
+#   aws_s3_bucket_policy_file   = "../../policy.json"
+#   aws_s3_bucket_policy_vars = {
+#     "aws_elb_account_id" : lookup(local.configs, "aws_elb_account_id")
+#   }
+# }
 # module "s3-sso-back-alb" {
 #   source                      = "./modules/s3"
 #   org_name                    = lookup(local.configs, "org_name")
@@ -122,46 +122,87 @@ module "s3-sso-front-alb" {
 #   }
 # }
 
-module "sso-front-alb" {
-  source                            = "./modules/alb"
-  app_name                          = lookup(local.configs, "app_name")
-  org_name                          = lookup(local.configs, "org_name")
-  env                               = terraform.workspace
-  default_tags                      = local.default_tags
-  aws_lb_name                       = "sso-front-alb"
-  aws_lb_sg_id                      = [module.security_group.aws_sg_id["sso-alb-front"]]
-  aws_lb_vpc_subnet                 = lookup(local.configs, "aws_subnet")
-  aws_lb_port                       = lookup(local.configs, "aws_alb_port")
-  map_migrated_tag                  = lookup(local.configs, "map_migrated_tag")
-  aws_lb_internal                   = false
-  aws_acm_cerficate_arn             = lookup(local.configs, "aws_acm_cerficate_arn")
-  aws_lb_type                       = "application"
-  aws_lb_access_logs_s3_bucket_name = module.s3-sso-front-alb.s3_bucket_name
-  aws_lb_protocol                   = "HTTPS"
-  aws_lb_http_port                  = "80"
-  aws_lb_tg_arn                     = module.tg-front-alb.tg_arn
-}
+# module "sso-front-alb" {
+#   source                            = "./modules/alb"
+#   app_name                          = lookup(local.configs, "app_name")
+#   org_name                          = lookup(local.configs, "org_name")
+#   env                               = terraform.workspace
+#   default_tags                      = local.default_tags
+#   aws_lb_name                       = "sso-front-alb"
+#   aws_lb_sg_id                      = [module.security_group.aws_sg_id["sso-alb-front"]]
+#   aws_lb_vpc_subnet                 = lookup(local.configs, "aws_subnet")
+#   aws_lb_port                       = lookup(local.configs, "aws_alb_port")
+#   map_migrated_tag                  = lookup(local.configs, "map_migrated_tag")
+#   aws_lb_internal                   = false
+#   aws_acm_cerficate_arn             = lookup(local.configs, "aws_acm_cerficate_arn")
+#   aws_lb_type                       = "application"
+#   aws_lb_access_logs_s3_bucket_name = module.s3-sso-front-alb.s3_bucket_name
+#   aws_lb_protocol                   = "HTTPS"
+#   aws_lb_http_port                  = "80"
+#   aws_lb_tg_arn                     = module.tg-front-alb.tg_arn
+# }
 
-module "sso-nlb" {
-  source                            = "./modules/alb"
-  app_name                          = lookup(local.configs, "app_name")
-  org_name                          = lookup(local.configs, "org_name")
-  env                               = terraform.workspace
-  aws_lb_name                       = "sso-back-alb"
-  default_tags                      = local.default_tags
-  aws_lb_sg_id                      = [module.security_group.aws_sg_id["sso-alb-back"]]
-  aws_lb_vpc_subnet                 = lookup(local.configs, "aws_subnet")
-  aws_lb_port                       = lookup(local.configs, "aws_alb_port")
-  map_migrated_tag                  = lookup(local.configs, "map_migrated_tag")
-  aws_lb_internal                   = true
-  aws_acm_cerficate_arn             = lookup(local.configs, "aws_acm_cerficate_arn")
-  aws_lb_type                       = "application"
-  aws_lb_protocol                   = "HTTPS"
-  enable_codeploy                   = true
-  aws_lb_access_logs_s3_bucket_name = module.s3-sso-back-alb.s3_bucket_name
-  aws_lb_tg_arn                     = module.tg-back-alb.tg_arn
-}
+# module "sso-nlb" {
+#   source                            = "./modules/alb"
+#   app_name                          = lookup(local.configs, "app_name")
+#   org_name                          = lookup(local.configs, "org_name")
+#   env                               = terraform.workspace
+#   aws_lb_name                       = "sso-back-alb"
+#   default_tags                      = local.default_tags
+#   aws_lb_sg_id                      = [module.security_group.aws_sg_id["sso-alb-back"]]
+#   aws_lb_vpc_subnet                 = lookup(local.configs, "aws_subnet")
+#   aws_lb_port                       = lookup(local.configs, "aws_alb_port")
+#   map_migrated_tag                  = lookup(local.configs, "map_migrated_tag")
+#   aws_lb_internal                   = true
+#   aws_acm_cerficate_arn             = lookup(local.configs, "aws_acm_cerficate_arn")
+#   aws_lb_type                       = "application"
+#   aws_lb_protocol                   = "HTTPS"
+#   enable_codeploy                   = true
+#   aws_lb_access_logs_s3_bucket_name = module.s3-sso-back-alb.s3_bucket_name
+#   aws_lb_tg_arn                     = module.tg-back-alb.tg_arn
+# }
 
+# Calling ECR module to create ECR Repository
+module "ecr" {
+  source           = "./modules/ecr"
+  app_name         = lookup(local.configs, "app_name")
+  org_name         = lookup(local.configs, "org_name")
+  env              = terraform.workspace
+  service_name     = lookup(local.configs, "service_name")
+  default_tags     = local.default_tags
+  map_migrated_tag = lookup(local.configs, "map_migrated_tag")
+}
+# data "aws_ecr_repository" "hello" {
+#   name = lookup(local.configs, "aws_ecr_repository_name")
+# }
+
+# # Calling Task-Defintion Module to create Task Definition
+# module "task-definition" {
+#   source                         = "./modules/task-definition"
+#   app_name                       = lookup(local.configs, "app_name")
+#   org_name                       = lookup(local.configs, "org_name")
+#   env                            = terraform.workspace
+#   aws_region                     = lookup(local.configs, "region")
+#   service_name                   = lookup(local.configs, "service_name")
+#   default_tags                   = local.default_tags
+#   aws_task_execution_role        = lookup(local.configs, "aws_task_execution_role")
+#   task_definition_file           = module.config.taskdefintionfile
+#   aws_ecs_task_definition_memory = local.configs.task_definition_variables.aws_ecs_task_definition_memory
+#   aws_ecs_task_definition_cpu    = local.configs.task_definition_variables.aws_ecs_task_definition_cpu
+#   map_migrated_tag               = lookup(local.configs, "map_migrated_tag")
+#
+#   task_definition_variables = {
+#     containers = [
+#       {
+#         name         = local.configs.task_definition_variables.containers[0].name
+#         portMappings = local.configs.task_definition_variables.containers[0].portMappings
+#         image        = data.aws_ecr_repository.
+#         essential    = true
+#       },
+#     ],
+#     volumes = try(local.configs.task_definition_variables.volumes, [])
+#   }
+# }
 # module "sso-nlb" {
 #   source                            = "./modules/alb"
 #   app_name                          = lookup(local.configs, "app_name")

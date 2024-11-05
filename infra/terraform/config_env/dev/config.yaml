@@ -8,7 +8,11 @@ aws_acm_cerficate_arn: "arn:aws:iam::677276076781:server-certificate/test"
 
 # lambda
 aws_lambda_role_arn: "arn:aws:iam::637423277544:role/rtctek-app_name-dev-lambdafunctionrole04"
-        
+
+
+# ecr name
+aws_ecr_repository_name: "rtcek-sso-global-dev-ecr"
+
 # Tags
 aws-migration-project-id: "MPE42366"
 division: "st"
@@ -144,3 +148,16 @@ dlsecret:
       fields: ["certificate"] 
     },
   ]
+
+aws_task_execution_role: "arn:aws:iam::677276076781:role/ecsTaskExecutionRole"
+task_definition_variables:
+  aws_ecs_task_definition_cpu: 512
+  aws_ecs_task_definition_memory: 1024
+  aws_ecr_repo_url: "677276076781.dkr.ecr.us-east-1.amazonaws.com/rtcek-sso-global-dev-ecr"
+  docker_image_tag: "latest"
+
+  containers:
+    - name: test
+      portMappings:
+        - containerPort: 8080
+          hostPort: 8080
