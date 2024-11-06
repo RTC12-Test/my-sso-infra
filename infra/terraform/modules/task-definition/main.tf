@@ -36,6 +36,6 @@ resource "aws_ecs_task_definition" "task_definition" {
     map-migrated = var.map_migrated_tag
   })
   lifecycle {
-    ignore_changes = [var.task_definition_variables.volumes.bind, var.task_definition_variables.volumes.efs]
+    ignore_changes = [volume[*].name]
   }
 }
