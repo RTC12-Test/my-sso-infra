@@ -38,11 +38,11 @@ on:
       codedeploy-deployment-group:
         description: "Codedeploy deployment group"
         type: string
-        required: true
+        required: false
       codedeploy-application:
         description: "Codedeploy application"
         type: string
-        required: true
+        required: false
       docker-image-url:
         description: "Docker image url"
         type: string
