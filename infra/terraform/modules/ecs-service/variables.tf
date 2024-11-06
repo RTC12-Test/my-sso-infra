@@ -98,7 +98,7 @@ variable "aws_ecs_service_deployment_rollback_enable" {
 variable "aws_ecs_service_assign_public_ip" {
   description = "Assign a public IP address to the ENI (Fargate launch type only). Valid values are true or false. Default false"
   type        = bool
-  default     = false
+  default     = true
 }
 variable "aws_ecs_service_deployment_controller_type" {
   description = "Type of deployment controller. Valid values: CODE_DEPLOY, ECS, EXTERNAL. Default: ECS"
