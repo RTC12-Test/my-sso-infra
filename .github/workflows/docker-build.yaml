@@ -49,17 +49,6 @@ jobs:
       # Checking out the code
       - name: Checkout code
         uses: actions/checkout@v4.1.3
-        with:
-          fetch-depth: 0
-
-      # Download the artifacts
-      - name: Download the artifacts to build the Image
-        if: ${{ inputs.selfhosted-runner  == false }}
-        uses: actions/download-artifact@v4.1.6
-        with:
-          name: ${{ github.event.repository.name }}
-          path: |
-            target/
 
       # Logging to aws
       - name: Configure aws credentials

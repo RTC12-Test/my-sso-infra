@@ -98,7 +98,4 @@ jobs:
           task-definition: ${{ inputs.update-docker-image-tag == true && steps.task-def.outputs.task-definition ||  steps.tasks.outputs.task-definition }}
           service: ${{ inputs.service-name }}
           cluster: ${{ inputs.cluster-name }}
-          codedeploy-appspec: ./infra/terraform/config_env/${{ inputs.env }}/appspec.json
-          codedeploy-application: ${{ inputs.codedeploy-application }}
-          codedeploy-deployment-group: ${{ inputs.codedeploy-deployment-group }}
           wait-for-service-stability: true

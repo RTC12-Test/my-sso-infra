@@ -1,4 +1,5 @@
 name: Docker Image Tag
+# This workflow is triggered to fetch the latest image tag running in the latest task definition
 
 on:
   workflow_call:
@@ -11,6 +12,10 @@ on:
         description: "AWS service name"
         type: string
         required: true
+      container-name:
+        description: "AWS container name"
+        type: string
+        required: true        
       role-to-assume:
         description: "AWS Role arn"
         type: string
@@ -41,15 +46,15 @@ jobs:
     outputs:
       docker-image-tag: ${{ steps.docker-image-tag.outputs.docker_image_tag}}
     steps:
-      # Logging to aws
+      # Logging to AWS
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4.0.2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ inputs.role-to-assume }}
           role-session-name: ${{ inputs.role-session-name }}
           aws-region: ${{ inputs.aws-region-name }}
 
-      # Install aws cli
+      # Install AWS cli
       - name: Install AWS cli
         id: install-AWS-cli
         uses: unfor19/install-aws-cli-action@v1
@@ -58,13 +63,23 @@ jobs:
           verbose: false
           arch: amd64
 
-      # Getting docker image tag
-      - name: Getting the docker image tag
+      # Getting Docker image tag
+      - name: Getting the Docker image tag
         id: docker-image-tag
         run: |
-          docker_image_tag=$(aws ecs describe-services --cluster ${{ inputs.cluster-name }} --services ${{ inputs.service-name }} --query "services[0].taskDefinition" --output text | xargs aws ecs describe-task-definition --task-definition | jq -r '.taskDefinition.containerDefinitions[0].image | split(":")[1]') && \
+          # Fetch the latest task definition ARN for the given service
+          task_definition_arn=$(aws ecs describe-services --cluster ${{ inputs.cluster-name }} --services ${{ inputs.service-name }} --query 'services[0].taskDefinition' --output text || 2> /dev/null)
+
+          # Fetch the task definition details
+          task_definition=$(aws ecs describe-task-definition --task-definition $task_definition_arn || 2> /dev/null)
+
+          # Extract the container definition using jq
+          docker_image_tag=$(echo $task_definition | jq -r --arg CONTAINER_NAME "${{ inputs.container-name }}" '.taskDefinition.containerDefinitions[] | select(.name == "${{ inputs.container-name }}") | .image' | awk -F ':' '{print $2}' || 2> /dev/null)
+
+          echo "Image Tag: $docker_image_tag"  
+
           if [ -z "$docker_image_tag" ]; then \
             echo "ECS service or task definition not found"; \
-            docker_image_tag=$(aws ecr describe-images --repository-name ${{ inputs.ecr-repo-name }} --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text); \
+            docker_image_tag=$(aws ecr describe-images --repository-name ${{ inputs.ecr-repo-name }} --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text | head -1); \
             fi && \
             echo "docker_image_tag=$docker_image_tag" >> $GITHUB_OUTPUT

@@ -67,14 +67,16 @@ jobs:
         if: ${{ inputs.sops-enable == true }}
         uses: RTC12-Test/my-sso-infra/.github/actions/sops@feature/secrets
         with:
-         aws-kms-key-arn : ${{ inputs.aws-kms-key-arn }}
          env: ${{ inputs.env }}
 
-      # # Replace image tag in json file
-      # - name: Replacing image tag in json file
-      #   if: ${{ github.repository != 'RTC12-Test/my-sso-infra' }}
-      #   run: |
-      #     sed -i 's/$docker_image_tag"/${{ inputs.docker-image-tag }}"/' service-${{ inputs.service-name}}.json
+      # Replace image tag in taskdefinition
+      - name: Update Docker tag in config
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: './infra/terraform/config_env/${{ inputs.env }}/config.yaml'
+          commitChange: false
+          propertyPath: ${{ inputs.propertyPath }}
+          value: ${{ inputs.docker-image-tag }}
       
       # Install Terraform CLI
       - name: Terraform install
