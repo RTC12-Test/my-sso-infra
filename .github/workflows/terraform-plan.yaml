@@ -43,6 +43,11 @@ on:
         type: boolean
         required: false
         default: false
+      propertyPath :
+        description: "Variable Key in config.yaml"
+        type: string
+        required: false
+        default: "task_definition_variables.docker_image_tag"
 
 jobs:
   # This job runs Terraform Plan
