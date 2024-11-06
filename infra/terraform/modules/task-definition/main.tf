@@ -8,6 +8,7 @@ resource "aws_ecs_task_definition" "task_definition" {
   execution_role_arn       = var.aws_task_execution_role
   task_role_arn            = var.aws_task_execution_role
   container_definitions    = templatefile(var.task_definition_file, local.task_definition_vars)
+  track_latest             = true
   dynamic "volume" {
     for_each = try(var.task_definition_variables.volumes.bind, {})
     content {
