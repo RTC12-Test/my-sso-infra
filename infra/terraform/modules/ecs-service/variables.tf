@@ -48,18 +48,18 @@ variable "aws_lb_green_target_group_name" {
   type        = string
   default     = ""
 }
-variable "aws_nlb_listener" {
-  description = "lb listener arn"
-  type        = string
-}
-variable "aws_lb_blue_target_group_name" {
-  description = "Name of  the blue target group"
-  type        = string
-}
-variable "aws_lb_active_target_group_arn" {
-  description = "ARN of the Load Balancer target group to associate with the service"
-  type        = string
-}
+# variable "aws_nlb_listener" {
+#   description = "lb listener arn"
+#   type        = string
+# }
+# variable "aws_lb_blue_target_group_name" {
+#   description = "Name of  the blue target group"
+#   type        = string
+# }
+# variable "aws_lb_active_target_group_arn" {
+#   description = "ARN of the Load Balancer target group to associate with the service"
+#   type        = string
+# }
 variable "org_name" {
   description = "Organization name"
   type        = string
