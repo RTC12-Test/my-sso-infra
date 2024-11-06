@@ -13,11 +13,11 @@ resource "aws_ecs_service" "ecs_service" {
     assign_public_ip = var.aws_ecs_service_assign_public_ip
     security_groups  = var.aws_ecs_service_sg_id
   }
-  load_balancer {
-    target_group_arn = var.aws_lb_active_target_group_arn
-    container_port   = var.aws_ecs_service_container_port
-    container_name   = var.aws_ecs_service_container_name
-  }
+  # load_balancer {
+  #   target_group_arn = var.aws_lb_active_target_group_arn
+  #   container_port   = var.aws_ecs_service_container_port
+  #   container_name   = var.aws_ecs_service_container_name
+  # }
   # deployment_controller {
   #   type = var.aws_ecs_service_deployment_controller_type
   # }
