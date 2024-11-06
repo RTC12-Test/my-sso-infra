@@ -1,20 +1,20 @@
 # Calling locals of config module
-locals {
-  configs      = nonsensitive(module.config.config_env) # Retrieve configurations from the config module
-  default_tags = module.config.default_tags
-  secrets      = module.config.secrets
-}
-
-# Module for configuring common settings
-module "config" {
-  source                = "./modules/config"
-  enable_config_secrets = true
-  org_name              = lookup(local.configs, "org_name")
-  app_name              = lookup(local.configs, "app_name")
-  division              = lookup(local.configs, "division")
-  department            = lookup(local.configs, "department")
-  technicalContact      = lookup(local.configs, "technicalContact")
-}
+# locals {
+#   configs      = nonsensitive(module.config.config_env) # Retrieve configurations from the config module
+#   default_tags = module.config.default_tags
+#   secrets      = module.config.secrets
+# }
+#
+# # Module for configuring common settings
+# module "config" {
+#   source                = "./modules/config"
+#   enable_config_secrets = true
+#   org_name              = lookup(local.configs, "org_name")
+#   app_name              = lookup(local.configs, "app_name")
+#   division              = lookup(local.configs, "division")
+#   department            = lookup(local.configs, "department")
+#   technicalContact      = lookup(local.configs, "technicalContact")
+# }
 
 # # Calling Delinea module
 # module "delinea" {
@@ -162,47 +162,10 @@ module "config" {
 #   aws_lb_tg_arn                     = module.tg-back-alb.tg_arn
 # }
 
-# Calling ECR module to create ECR Repository
-module "ecr" {
-  source           = "./modules/ecr"
-  app_name         = lookup(local.configs, "app_name")
-  org_name         = lookup(local.configs, "org_name")
-  env              = terraform.workspace
-  service_name     = lookup(local.configs, "service_name")
-  default_tags     = local.default_tags
-  map_migrated_tag = lookup(local.configs, "map_migrated_tag")
-}
 # data "aws_ecr_repository" "hello" {
 #   name = lookup(local.configs, "aws_ecr_repository_name")
 # }
 
-# # Calling Task-Defintion Module to create Task Definition
-# module "task-definition" {
-#   source                         = "./modules/task-definition"
-#   app_name                       = lookup(local.configs, "app_name")
-#   org_name                       = lookup(local.configs, "org_name")
-#   env                            = terraform.workspace
-#   aws_region                     = lookup(local.configs, "region")
-#   service_name                   = lookup(local.configs, "service_name")
-#   default_tags                   = local.default_tags
-#   aws_task_execution_role        = lookup(local.configs, "aws_task_execution_role")
-#   task_definition_file           = module.config.taskdefintionfile
-#   aws_ecs_task_definition_memory = local.configs.task_definition_variables.aws_ecs_task_definition_memory
-#   aws_ecs_task_definition_cpu    = local.configs.task_definition_variables.aws_ecs_task_definition_cpu
-#   map_migrated_tag               = lookup(local.configs, "map_migrated_tag")
-#
-#   task_definition_variables = {
-#     containers = [
-#       {
-#         name         = local.configs.task_definition_variables.containers[0].name
-#         portMappings = local.configs.task_definition_variables.containers[0].portMappings
-#         image        = data.aws_ecr_repository.
-#         essential    = true
-#       },
-#     ],
-#     volumes = try(local.configs.task_definition_variables.volumes, [])
-#   }
-# }
 # module "sso-nlb" {
 #   source                            = "./modules/alb"
 #   app_name                          = lookup(local.configs, "app_name")
